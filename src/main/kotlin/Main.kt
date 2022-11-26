@@ -85,7 +85,7 @@ fun deleteBook(){
         val indexToDelete = readNextInt("Enter the index of the book to delete: ")
         val bookToDelete = bookAPI.deleteBook(indexToDelete)
         if (bookToDelete != null) {
-            println("Delete Successful! Deleted note: ${bookToDelete.bookTitle}")
+            println("Delete Successful! Deleted book: ${bookToDelete.bookTitle}")
         } else {
             println("Delete NOT Successful")
         }

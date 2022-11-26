@@ -2,6 +2,7 @@ package controllers
 
 import models.Comic
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import java.util.*
 import kotlin.test.assertEquals
@@ -61,6 +62,26 @@ class ComicAPITest {
             assertTrue(emptyComics!!.add(newComic))
             assertEquals(1, emptyComics!!.numberOfComics())
             assertEquals(newComic, emptyComics!!.findComic(emptyComics!!.numberOfComics() - 1))
+        }
+    }
+
+    @Nested
+    inner class DeleteComics {
+
+        @Test
+        fun `deleting a Comic that does not exist, returns null`() {
+            assertNull(emptyComics!!.deleteComic(0))
+            assertNull(populatedComics!!.deleteComic(-1))
+            assertNull(populatedComics!!.deleteComic(5))
+        }
+
+        @Test
+        fun `deleting a comic that exists delete and returns deleted object`() {
+            assertEquals(5, populatedComics!!.numberOfComics())
+            assertEquals(animalplanet, populatedComics!!.deleteComic(4))
+            assertEquals(4, populatedComics!!.numberOfComics())
+            assertEquals(animeadventures, populatedComics!!.deleteComic(0))
+            assertEquals(3, populatedComics!!.numberOfComics())
         }
     }
 
