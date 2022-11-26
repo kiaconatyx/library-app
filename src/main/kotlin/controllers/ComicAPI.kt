@@ -83,4 +83,34 @@ class ComicAPI {
         }
         return counter
     }
+
+    fun listComicsBySelectedRating(rating: Int): String {
+        return if (comics.isEmpty()) {
+            "No comics stored"
+        } else {
+            var listOfComics = ""
+            for (i in comics.indices) {
+                if (comics[i].comicRating == rating) {
+                    listOfComics +=
+                        """$i: ${comics[i]}
+                        """.trimIndent()
+                }
+            }
+            if (listOfComics.equals("")) {
+                "No comics with rating: $rating"
+            } else {
+                "${numberOfComicsByRating(rating)} comics with a rating of $rating: $listOfComics"
+            }
+        }
+    }
+
+    fun numberOfComicsByRating(rating: Int): Int {
+        var counter = 0
+        for (comic in comics) {
+            if (comic.comicRating == rating) {
+                counter++
+            }
+        }
+        return counter
+    }
 }
