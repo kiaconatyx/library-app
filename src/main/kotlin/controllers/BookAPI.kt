@@ -19,4 +19,18 @@ class BookAPI {
             listOfBooks
         }
     }
+
+    fun numberOfBooks(): Int {
+        return books.size
+    }
+
+    fun findBook(index: Int): Book? {
+        return if (isValidListIndex(index, books)) {
+            books[index]
+        } else null
+    }
+
+    fun isValidListIndex(index: Int, list: List<Any>): Boolean {
+        return (index >= 0 && index < list.size)
+    }
 }

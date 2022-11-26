@@ -20,4 +20,19 @@ class ComicAPI {
             listOfComics
         }
     }
+
+    fun numberOfComics(): Int {
+        return comics.size
+    }
+
+    fun findComic(index: Int): Comic? {
+        return if (isValidListIndex(index, comics)) {
+            comics[index]
+        } else null
+    }
+
+    //utility method to determine if an index is valid in a list.
+    fun isValidListIndex(index: Int, list: List<Any>): Boolean {
+        return (index >= 0 && index < list.size)
+    }
 }
