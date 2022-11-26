@@ -60,4 +60,21 @@ class ComicAPITest {
         assertEquals(1, emptyComics!!.numberOfComics())
         assertEquals(newComic, emptyComics!!.findComic(emptyComics!!.numberOfComics() - 1))
     }
+
+    @Test
+    fun `listAllComics returns No Comics Stored message when ArrayList is empty`() {
+        assertEquals(0, emptyComics!!.numberOfComics())
+        assertTrue(emptyComics!!.listAllComics().lowercase().contains("no comics to see"))
+    }
+
+    @Test
+    fun `listAllComics returns Comics when ArrayList has notes stored`() {
+        assertEquals(5, populatedComics!!.numberOfComics())
+        val comicsString = populatedComics!!.listAllComics().lowercase()
+        assertTrue(comicsString.contains("anime adventures"))
+        assertTrue(comicsString.contains("race to victory"))
+        assertTrue(comicsString.contains("love a little"))
+        assertTrue(comicsString.contains("cooking mama"))
+        assertTrue(comicsString.contains("animal planet"))
+    }
 }
