@@ -76,7 +76,7 @@ class ComicAPITest {
         }
 
         @Test
-        fun `deleting a comic that exists delete and returns deleted object`() {
+        fun `deleting a Comic that exists delete and returns deleted object`() {
             assertEquals(5, populatedComics!!.numberOfComics())
             assertEquals(animalplanet, populatedComics!!.deleteComic(4))
             assertEquals(4, populatedComics!!.numberOfComics())
