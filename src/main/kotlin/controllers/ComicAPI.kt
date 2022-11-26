@@ -113,4 +113,14 @@ class ComicAPI {
         }
         return counter
     }
+
+    fun listComicsBySelectedGenre(cat: String): String =
+        if (comics.isEmpty()) "No Comics Stored"
+        else {
+            val listOfComics = formatListString(comics.filter{ comic -> comic.comicGenre == cat})
+            if (listOfComics.equals("")) "No comics with genre: $cat"
+            else "${numberOfComicsbyGenre(cat)} comics with genre $cat: $listOfComics"
+        }
+
+    fun numberOfComicsByGenre(cat: String): Int = comics.count { p: Comic -> p.comicGenre == cat }
 }
