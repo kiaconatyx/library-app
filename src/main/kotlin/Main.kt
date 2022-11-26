@@ -76,8 +76,29 @@ fun listBooks(){
 }
 
 fun updateBook(){
-    logger.info { "updateBook() function invoked" }
+   // logger.info { "updateBook() function invoked" }
+    listBooks()
+    if (bookAPI.numberOfBooks() > 0) {
+        //only ask the user to choose the book if books exist
+        val indexToUpdate = readNextInt("Enter the index of the book to update: ")
+        if (bookAPI.isValidIndex(indexToUpdate)) {
+            val bookTitle = readNextLine("Enter a title for the book: ")
+            val bookRating = readNextInt("Enter a rating (1-low, 2, 3, 4, 5-high): ")
+            val bookISBN = readNextInt("Enter a Unique ISBN for the book ")
+            val bookGenre = readNextLine("Enter a genre for the book: ")
+
+            //pass the index of the book and the new book details to BookAPI for updating and check for success.
+            if (bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookRating, bookISBN,bookGenre, false))){
+                println("Update Successful")
+            } else {
+                println("Update Failed")
+            }
+        } else {
+            println("There are no books for this index number")
+        }
+    }
 }
+
 
 fun deleteBook(){
     listBooks()
@@ -110,8 +131,28 @@ fun listComics(){
 }
 
 fun updateComic(){
-    logger.info { "updateComic() function invoked" }
+    //logger.info { "updateComic() function invoked" }
+    listComics()
+    if (comicAPI.numberOfComics() > 0) {
+        //only ask the user to choose the comic if comics exist
+        val indexToUpdate = readNextInt("Enter the index of the comic to update: ")
+        if (comicAPI.isValidIndex(indexToUpdate)) {
+            val comicTitle = readNextLine("Enter a title for the comic: ")
+            val comicRating = readNextInt("Enter a rating (1-low, 2, 3, 4, 5-high): ")
+            val comicGenre = readNextLine("Enter a genre for the comic: ")
+
+            //pass the index of the comic and the new comic details to ComicAPI for updating and check for success.
+            if (comicAPI.updateComic(indexToUpdate, Comic(comicTitle, comicRating, comicGenre, false))){
+                println("Update Successful")
+            } else {
+                println("Update Failed")
+            }
+        } else {
+            println("There are no comics for this index number")
+        }
+    }
 }
+
 
 fun deleteComic(){
     //logger.info { "deleteComic() function invoked" }

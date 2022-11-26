@@ -1,8 +1,8 @@
 package models
 
-data class Book(val bookTitle: String,
-                val bookRating: Int,
-                val bookISBN: Int,
-                val bookGenre: String,
-                val isBookArchived :Boolean){
+data class Book(var bookTitle: String,
+                var bookRating: Int,
+                var bookISBN: Int,
+                var bookGenre: String,
+                var isBookArchived :Boolean){
 }

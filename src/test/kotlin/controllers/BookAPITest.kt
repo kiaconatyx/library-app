@@ -86,6 +86,30 @@ class BookAPITest {
     }
 
     @Nested
+    inner class UpdateBooks {
+        @Test
+        fun `updating a book that does not exist returns false`(){
+            assertFalse(populatedBooks!!.updateBook(6, Book("Updating Book", 2, 113, "Fiction", false)))
+            assertFalse(populatedBooks!!.updateBook(-1, Book("Updating Book", 2, 114, "True Crime", false)))
+            assertFalse(emptyBooks!!.updateBook(0, Book("Updating Book", 2, 112,"Music",  false)))
+        }
+
+        @Test
+        fun `updating a book that exists returns true and updates`() {
+            //check book 5 exists and check the contents
+            assertEquals(dolphinworld, populatedBooks!!.findBook(4))
+            assertEquals("Dolphin World", populatedBooks!!.findBook(4)!!.bookTitle)
+            assertEquals(3, populatedBooks!!.findBook(4)!!.bookRating)
+            assertEquals("Nature", populatedBooks!!.findBook(4)!!.bookGenre)
+
+            //update book 5 with new information and ensure contents updated successfully
+            assertTrue(populatedBooks!!.updateBook(4, Book("Updating Book", 2, 102, "Nature", false)))
+            assertEquals("Updating Book", populatedBooks!!.findBook(4)!!.bookTitle)
+            assertEquals(2, populatedBooks!!.findBook(4)!!.bookRating)
+            assertEquals("Animals", populatedBooks!!.findBook(4)!!.bookGenre)
+        }
+    }
+    @Nested
     inner class ListBooks {
         @Test
         fun `listAllBooks returns No Books Stored message when ArrayList is empty`() {
@@ -210,7 +234,7 @@ class BookAPITest {
 
             val genre4String = populatedBooks!!.listBooksBySelectedGenre("Work").lowercase()
             assertTrue(genre4String.contains("2 book"))
-            assertTrue(genre4String.contains("priority 4"))
+            assertTrue(genre4String.contains("genre 4"))
             assertFalse(genre4String.contains("dolphin world"))
             assertTrue(genre4String.contains("learn to code"))
             assertTrue(genre4String.contains("final fantasy - the world beyond"))
