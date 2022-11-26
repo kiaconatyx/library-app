@@ -197,5 +197,43 @@ class BookAPITest {
             assertFalse(genre4String.contains("cooking for dummies"))
         }
 
+        @Test
+        fun `listBooksBySelectedISBN returns No Books when ArrayList is empty`() {
+            assertEquals(0, emptyBooks!!.numberOfBooks())
+            assertTrue(emptyBooks!!.listBooksBySelectedISBN(1).lowercase().contains("no books")
+            )
+        }
+
+        @Test
+        fun `listBooksBySelectedISBN returns no books when no books of that ISBN exist`() {
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            val ISBNString = populatedBooks!!.listBooksBySelectedISBN(2).lowercase()
+            assertTrue(ISBNString.contains("no books"))
+            assertTrue(ISBNString.contains("2"))
+        }
+
+        @Test
+        fun `listBooksBySelectedISBN returns all books that match that ISBN when books of that ISBN exist`() {
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            val ISBN1String = populatedBooks!!.listBooksBySelectedISBN(1).lowercase()
+            assertTrue(ISBN1String.contains("1 comic"))
+            assertTrue(ISBN1String.contains("rating 1"))
+            assertTrue(ISBN1String.contains("music 101"))
+            assertFalse(ISBN1String.contains("dolphin world"))
+            assertFalse(ISBN1String.contains("cooking for dummies"))
+            assertFalse(ISBN1String.contains("learn to code"))
+            assertFalse(ISBN1String.contains("final fantasy - the world beyond"))
+
+
+            val ISBN4String = populatedBooks!!.listBooksBySelectedISBN(4).lowercase(Locale.getDefault())
+            assertTrue(ISBN4String.contains("100 comic"))
+            assertTrue(ISBN4String.contains("rating 4"))
+            assertFalse(ISBN4String.contains("dolphin world"))
+            assertTrue(ISBN4String.contains("learn to code"))
+            assertTrue(ISBN4String.contains("cooking for dummies"))
+            assertFalse(ISBN4String.contains("music 101"))
+            assertFalse(ISBN4String.contains("final fantasy - the world beyond"))
+        }
+
     }
 }
