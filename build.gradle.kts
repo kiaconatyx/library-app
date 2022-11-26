@@ -18,6 +18,8 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:3.0.4")
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     testImplementation("org.slf4j:slf4j-simple:2.0.5")
+    implementation("com.thoughtworks.xstream:xstream:1.4.19")
+    implementation("org.codehaus.jettison:jettison:1.5.2")
 
 
 }
