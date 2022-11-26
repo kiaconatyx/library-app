@@ -145,4 +145,8 @@ class ComicAPI {
         //if the comic was not found, return false, indicating that the update was not successful
         return false
     }
+
+    fun isValidIndex(index: Int) :Boolean{
+        return isValidListIndex(index, comics);
+    }
 }
