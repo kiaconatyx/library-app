@@ -46,12 +46,18 @@ class ComicAPITest {
     @Test
     fun `adding a Comic to a populated list adds to ArrayList`(){
         val newComic = Comic("Vampire Slayer Part 1", 5, "fantasy", false)
+        assertEquals(5, populatedComics!!.numberOfComics())
         assertTrue(populatedComics!!.add(newComic))
+        assertEquals(6, populatedComics!!.numberOfComics())
+        assertEquals(newComic, populatedComics!!.findComic(populatedComics!!.numberOfComics() - 1))
     }
 
     @Test
     fun `adding a Comic to an empty list adds to ArrayList`(){
         val newComic = Comic("Vampire Slayer Part 1", 5, "fantasy",  false)
+        assertEquals(0, emptyComics!!.numberOfComics())
         assertTrue(emptyComics!!.add(newComic))
+        assertEquals(1, emptyComics!!.numberOfComics())
+        assertEquals(newComic, emptyComics!!.findComic(emptyComics!!.numberOfComics() - 1))
     }
 }
