@@ -149,4 +149,14 @@ class ComicAPI {
     fun isValidIndex(index: Int) :Boolean{
         return isValidListIndex(index, comics);
     }
+
+    @Throws(Exception::class)
+    fun load() {
+        comics = serializer.read() as ArrayList<Comic>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(comics)
+    }
 }

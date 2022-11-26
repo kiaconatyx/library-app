@@ -179,6 +179,16 @@ class BookAPI {
     fun isValidIndex(index: Int) :Boolean{
         return isValidListIndex(index, books);
     }
+
+    @Throws(Exception::class)
+    fun load() {
+        books = serializer.read() as ArrayList<Book>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(books)
+    }
 }
 
 

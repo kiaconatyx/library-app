@@ -3,13 +3,17 @@ import controllers.ComicAPI
 import models.Book
 import models.Comic
 import mu.KotlinLogging
+import persistence.XMLSerializer
 import utils.ScannerInput
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
+import java.io.File
 import java.lang.System.exit
 private val logger = KotlinLogging.logger {}
-private val bookAPI = BookAPI()
-private val comicAPI = ComicAPI()
+
+
+private val bookAPI = BookAPI(XMLSerializer(File("books.xml")))
+private val comicAPI = ComicAPI(XMLSerializer(File("comics.xml")))
 
 fun main(args: Array<String>) {
     runMenu()
@@ -168,6 +172,23 @@ fun deleteComic(){
     }
 }
 
+fun save() {
+    try {
+        bookAPI.store()
+        comicAPI.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
+    }
+}
+
+fun load() {
+    try {
+        bookAPI.load()
+        comicAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
+    }
+}
 fun exitApp(){
     println("Exiting...bye")
     exit(0)
