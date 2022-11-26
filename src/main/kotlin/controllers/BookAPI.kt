@@ -1,6 +1,7 @@
 package controllers
 
 import models.Book
+import models.Comic
 
 class BookAPI {
     private var books = ArrayList<Book>()
@@ -141,4 +142,14 @@ class BookAPI {
         }
         return counter
     }
+
+    fun listBooksBySelectedGenre(cat: String): String =
+        if (books.isEmpty()) "No Books are Stored"
+        else {
+            val listOfBooks = formatListString(books.filter{ book -> book.bookGenre == cat})
+            if (listOfBooks.equals("")) "No books with genre: $cat"
+            else "${numberOfBooksByGenre(cat)} books with genre $cat: $listOfBooks"
+        }
+
+    fun numberOfBooksByGenre(cat: String): Int = books.count { p: Book -> p.bookGenre == cat }
 }
