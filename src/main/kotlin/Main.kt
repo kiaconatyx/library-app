@@ -1,4 +1,5 @@
 import controllers.BookAPI
+import controllers.ComicAPI
 import models.Book
 import mu.KotlinLogging
 import utils.ScannerInput
@@ -7,6 +8,7 @@ import utils.ScannerInput.readNextLine
 import java.lang.System.exit
 private val logger = KotlinLogging.logger {}
 private val bookAPI = BookAPI()
+private val comicAPI = ComicAPI()
 
 fun main(args: Array<String>) {
     runMenu()
@@ -16,13 +18,20 @@ fun main(args: Array<String>) {
 fun mainMenu() : Int {
     return ScannerInput.readNextInt(""" 
          > ----------------------------------
-         > |        Book Depo APP           |
+         > |       LIBRARY APP              |
          > ----------------------------------
-         > | NOTE MENU                      |
+         > | BOOK MENU                      |
          > |   1) Add a book                |
          > |   2) List all books            |
          > |   3) Update a book             |
          > |   4) Delete a book             |
+         > ----------------------------------
+         > | Comic MENU                     |
+         > |   5) Add a Comic               |
+         > |   6) List all Comics           |
+         > |   7) Update a Comic            |
+         > |   8) Delete a Comic            |
+         > ----------------------------------
          > ----------------------------------
          > |   0) Exit                      |
          > ----------------------------------
@@ -37,6 +46,10 @@ fun runMenu() {
             2  -> listBooks()
             3  -> updateBook()
             4  -> deleteBook()
+            5  -> addComic()
+            6  -> listComics()
+            7  -> updateComic()
+            8  -> deleteComic()
             0  -> exitApp()
             else -> println("Invalid option entered: ${option}")
         }
