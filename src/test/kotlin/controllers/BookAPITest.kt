@@ -123,5 +123,43 @@ class BookAPITest {
             assertFalse(archivedBooksString.contains("cooking for dummies"))
             assertTrue(archivedBooksString.contains("dolphin world"))
         }
+
+        @Test
+        fun `listBooksBySelectedRating returns No Books when ArrayList is empty`() {
+            assertEquals(0, emptyBooks!!.numberOfBooks())
+            assertTrue(emptyBooks!!.listBooksBySelectedRating(1).lowercase().contains("no books")
+            )
+        }
+
+        @Test
+        fun `listBooksBySelectedRating returns no books when no books of that rating exist`() {
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            val rating2String = populatedBooks!!.listBooksBySelectedRating(2).lowercase()
+            assertTrue(rating2String.contains("no books"))
+            assertTrue(rating2String.contains("2"))
+        }
+
+        @Test
+        fun `listBooksBySelectedRating returns all books that match that rating when books of that rating exist`() {
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            val rating1String = populatedBooks!!.listBooksBySelectedRating(1).lowercase()
+            assertTrue(rating1String.contains("1 comic"))
+            assertTrue(rating1String.contains("rating 1"))
+            assertTrue(rating1String.contains("music 101"))
+            assertFalse(rating1String.contains("dolphin world"))
+            assertFalse(rating1String.contains("cooking for dummies"))
+            assertFalse(rating1String.contains("learn to code"))
+            assertFalse(rating1String.contains("final fantasy - the world beyond"))
+
+
+            val rating4String = populatedBooks!!.listBooksBySelectedRating(4).lowercase(Locale.getDefault())
+            assertTrue(rating4String.contains("2 comic"))
+            assertTrue(rating4String.contains("rating 4"))
+            assertFalse(rating4String.contains("dolphin world"))
+            assertTrue(rating4String.contains("learn to code"))
+            assertTrue(rating4String.contains("cooking for dummies"))
+            assertFalse(rating4String.contains("music 101"))
+            assertFalse(rating4String.contains("final fantasy - the world beyond"))
+        }
     }
 }
