@@ -60,4 +60,21 @@ class BookAPITest {
         assertEquals(1, emptyBooks!!.numberOfBooks())
         assertEquals(newBook, emptyBooks!!.findBook(emptyBooks!!.numberOfBooks() - 1))
     }
+
+    @Test
+    fun `listAllBooks returns No Books Stored message when ArrayList is empty`() {
+        assertEquals(0, emptyBooks!!.numberOfBooks())
+        assertTrue(emptyBooks!!.listAllBooks().lowercase().contains("no books to see here"))
+    }
+
+    @Test
+    fun `listAllBooks returns Books when ArrayList has books stored`() {
+        assertEquals(5, populatedBooks!!.numberOfBooks())
+        val booksString = populatedBooks!!.listAllBooks().lowercase()
+        assertTrue(booksString.contains("music 101"))
+        assertTrue(booksString.contains("learn to code"))
+        assertTrue(booksString.contains("cooking for dummies"))
+        assertTrue(booksString.contains("final fantasy - the world beyond"))
+        assertTrue(booksString.contains("dolphin world"))
+    }
 }
