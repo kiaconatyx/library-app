@@ -86,6 +86,30 @@ class ComicAPITest {
     }
 
     @Nested
+    inner class UpdateComics {
+        @Test
+        fun `updating a comic that does not exist returns false`(){
+            assertFalse(populatedComics!!.updateComic(6, Comic("Updating Comic", 2, "Work", false)))
+            assertFalse(populatedComics!!.updateComic(-1, Comic("Updating Comic", 2, "Work", false)))
+            assertFalse(emptyComics!!.updateComic(0, Comic("Updating Comic", 2, "Work", false)))
+        }
+
+        @Test
+        fun `updating a comic that exists returns true and updates`() {
+            //check comic 5 exists and check the contents
+            assertEquals(animeadventures, populatedComics!!.findComic(4))
+            assertEquals("Anime Adventures", populatedComics!!.findComic(4)!!.comicTitle)
+            assertEquals(3, populatedComics!!.findComic(4)!!.comicRating)
+            assertEquals("Fantasy", populatedComics!!.findComic(4)!!.comicGenre)
+
+            //update comic 5 with new information and ensure contents updated successfully
+            assertTrue(populatedComics!!.updateComic(4, Comic("Updating Comic", 2, "Fantasy - Anime", false)))
+            assertEquals("Updating Comic", populatedComics!!.findComic(4)!!.comicTitle)
+            assertEquals(2, populatedComics!!.findComic(4)!!.comicRating)
+            assertEquals("Fantasy", populatedComics!!.findComic(4)!!.comicGenre)
+        }
+    }
+    @Nested
     inner class ListComics {
         @Test
         fun `listAllComics returns No Comics Stored message when ArrayList is empty`() {
@@ -212,7 +236,7 @@ class ComicAPITest {
 
             val genre4String = populatedComics!!.listComicsBySelectedGenre("Work").lowercase()
             assertTrue(genre4String.contains("2 comic"))
-            assertTrue(genre4String.contains("priority 4"))
+            assertTrue(genre4String.contains("genre 4"))
             assertFalse(genre4String.contains("animal planet"))
             assertTrue(genre4String.contains("love a little"))
             assertTrue(genre4String.contains("race to victory"))
