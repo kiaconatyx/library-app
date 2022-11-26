@@ -46,12 +46,18 @@ class BookAPITest {
     @Test
     fun `adding a Book to a populated list adds to ArrayList`(){
         val newBook = Book("Buddy Holly Life Story", 5, 107, "bio",false)
+        assertEquals(5, populatedBooks!!.numberOfBooks())
         assertTrue(populatedBooks!!.add(newBook))
+        assertEquals(6, populatedBooks!!.numberOfBooks())
+        assertEquals(newBook, populatedBooks!!.findBook(populatedBooks!!.numberOfBooks() - 1))
     }
 
     @Test
     fun `adding a Book to an empty list adds to ArrayList`(){
         val newBook = Book("Buddy Holly Life Story", 5, 107, "bio", false)
+        assertEquals(0, emptyBooks!!.numberOfBooks())
         assertTrue(emptyBooks!!.add(newBook))
+        assertEquals(1, emptyBooks!!.numberOfBooks())
+        assertEquals(newBook, emptyBooks!!.findBook(emptyBooks!!.numberOfBooks() - 1))
     }
 }
