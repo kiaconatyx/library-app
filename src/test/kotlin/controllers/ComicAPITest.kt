@@ -1,11 +1,8 @@
 package controllers
 
 import models.Comic
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -66,6 +63,7 @@ class ComicAPITest {
             assertEquals(newComic, emptyComics!!.findComic(emptyComics!!.numberOfComics() - 1))
         }
     }
+
     @Nested
     inner class ListComics {
         @Test
@@ -84,43 +82,122 @@ class ComicAPITest {
             assertTrue(comicsString.contains("cooking mama"))
             assertTrue(comicsString.contains("animal planet"))
         }
-    }
 
-    @Test
-    fun `listActiveComics returns no active comics stored when ArrayList is empty`() {
-        assertEquals(0, emptyComics!!.numberOfActiveComics())
-        assertTrue(
-            emptyComics!!.listActiveComics().lowercase().contains("no active comics")
-        )
-    }
+        @Test
+        fun `listActiveComics returns no active comics stored when ArrayList is empty`() {
+            assertEquals(0, emptyComics!!.numberOfActiveComics())
+            assertTrue(
+                emptyComics!!.listActiveComics().lowercase().contains("no active comics")
+            )
+        }
 
-    @Test
-    fun `listActiveComics returns active comics when ArrayList has active comics stored`() {
-        assertEquals(3, populatedComics!!.numberOfActiveComics())
-        val activeComicsString = populatedComics!!.listActiveComics().lowercase()
-        assertTrue(activeComicsString.contains("anime adventures"))
-        assertFalse(activeComicsString.contains("race to victory"))
-        assertTrue(activeComicsString.contains("love a little"))
-        assertTrue(activeComicsString.contains("cooking mama"))
-        assertFalse(activeComicsString.contains("animal planet"))
-    }
+        @Test
+        fun `listActiveComics returns active comics when ArrayList has active comics stored`() {
+            assertEquals(3, populatedComics!!.numberOfActiveComics())
+            val activeComicsString = populatedComics!!.listActiveComics().lowercase()
+            assertTrue(activeComicsString.contains("anime adventures"))
+            assertFalse(activeComicsString.contains("race to victory"))
+            assertTrue(activeComicsString.contains("love a little"))
+            assertTrue(activeComicsString.contains("cooking mama"))
+            assertFalse(activeComicsString.contains("animal planet"))
+        }
 
-    @Test
-    fun `listArchivedComics returns no archived comics when ArrayList is empty`() {
-        assertEquals(0, emptyComics!!.numberOfArchivedComics())
-        assertTrue(
-            emptyComics!!.listArchivedComics().lowercase().contains("no archived comics")
-        )
-    }
+        @Test
+        fun `listArchivedComics returns no archived comics when ArrayList is empty`() {
+            assertEquals(0, emptyComics!!.numberOfArchivedComics())
+            assertTrue(
+                emptyComics!!.listArchivedComics().lowercase().contains("no archived comics")
+            )
+        }
 
-    @Test
-    fun `listArchivedComics returns archived comics when ArrayList has archived comics stored`() {
-        assertEquals(2, populatedComics!!.numberOfArchivedComics())
-        val archivedComicsString = populatedComics!!.listArchivedComics().lowercase(Locale.getDefault())
-        assertFalse(archivedComicsString.contains("anime adventures"))
-        assertTrue(archivedComicsString.contains("race to victory"))
-        assertFalse(archivedComicsString.contains("love a little"))
-        assertFalse(archivedComicsString.contains("cooking mama"))
-        assertTrue(archivedComicsString.contains("animal planet"))
+        @Test
+        fun `listArchivedComics returns archived comics when ArrayList has archived comics stored`() {
+            assertEquals(2, populatedComics!!.numberOfArchivedComics())
+            val archivedComicsString = populatedComics!!.listArchivedComics().lowercase(Locale.getDefault())
+            assertFalse(archivedComicsString.contains("anime adventures"))
+            assertTrue(archivedComicsString.contains("race to victory"))
+            assertFalse(archivedComicsString.contains("love a little"))
+            assertFalse(archivedComicsString.contains("cooking mama"))
+            assertTrue(archivedComicsString.contains("animal planet"))
+        }
+
+        @Test
+        fun `listComicsBySelectedRating returns No Comics when ArrayList is empty`() {
+            assertEquals(0, emptyComics!!.numberOfComics())
+            assertTrue(emptyComics!!.listComicsBySelectedRating(1).lowercase().contains("no comics")
+            )
+        }
+
+        @Test
+        fun `listComicsBySelectedRating returns no comics when no comics of that rating exist`() {
+            //Rating 1 (1 comic), 2 (none), 3 (1 comic). 4 (2 comics), 5 (1 comic)
+            assertEquals(5, populatedComics!!.numberOfComics())
+            val rating2String = populatedComics!!.listComicsBySelectedRating(2).lowercase()
+            assertTrue(rating2String.contains("no comics"))
+            assertTrue(rating2String.contains("2"))
+        }
+
+        @Test
+        fun `listComicsBySelectedRating returns all comics that match that rating when comics of that rating exist`() {
+            //Rating 1 (1 comic), 2 (none), 3 (1 comic). 4 (2 comics), 5 (1 comic)
+            assertEquals(5, populatedComics!!.numberOfComics())
+            val rating1String = populatedComics!!.listComicsBySelectedRating(1).lowercase()
+            assertTrue(rating1String.contains("1 comic"))
+            assertTrue(rating1String.contains("rating 1"))
+            assertTrue(rating1String.contains("anime adventures"))
+            assertFalse(rating1String.contains("race to victory"))
+            assertFalse(rating1String.contains("love a little"))
+            assertFalse(rating1String.contains("cooking mama"))
+            assertFalse(rating1String.contains("animal planet"))
+
+
+            val rating4String = populatedComics!!.listComicsBySelectedRating(4).lowercase(Locale.getDefault())
+            assertTrue(rating4String.contains("2 comic"))
+            assertTrue(rating4String.contains("rating 4"))
+            assertFalse(rating4String.contains("race to victory"))
+            assertTrue(rating4String.contains("cooking mama"))
+            assertTrue(rating4String.contains("animal planet"))
+            assertFalse(rating4String.contains("love a little"))
+            assertFalse(rating4String.contains("anime adventures"))
+        }
+
+        @Test
+        fun `listComicsBySelectedGenre returns No Comics when ArrayList is empty`() {
+            Assertions.assertEquals(0, emptyComics!!.numberOfComics())
+            assertTrue(emptyComics!!.listComicsBySelectedGenre("Work").lowercase().contains("no comics")
+            )
+        }
+
+        @Test
+        fun `listComicsBySelectedGenre returns no comics when no comics of that genre exist`() {
+            //Genre 1 (1 comic), 2 (none), 3 (1 comic). 4 (2 comics), 5 (1 comic)
+            Assertions.assertEquals(5, populatedComics!!.numberOfComics())
+            val genre2String = populatedComics!!.listComicsBySelectedGenre("Work").lowercase()
+            assertTrue(genre2String.contains("no comics"))
+            assertTrue(genre2String.contains("2"))
+        }
+        @Test
+        fun `listComicsBySelectedGenre returns all comics that match that genre when comics of that genre exist`() {
+            //Genre 1 (1 comic), 2 (none), 3 (1 comic). 4 (2 comics), 5 (1 comic)
+            Assertions.assertEquals(5, populatedComics!!.numberOfComics())
+            val genre1String = populatedComics!!.listComicsBySelectedGenre("Hobby").lowercase()
+            assertTrue(genre1String.contains("1 comic"))
+            assertTrue(genre1String.contains("genre 1"))
+            assertTrue(genre1String.contains("anime adventures"))
+            assertFalse(genre1String.contains("animal planet"))
+            assertFalse(genre1String.contains("cooking mama"))
+            assertFalse(genre1String.contains("love a little"))
+            assertFalse(genre1String.contains("race to victory"))
+
+            val genre4String = populatedComics!!.listComicsBySelectedGenre("Work").lowercase()
+            assertTrue(genre4String.contains("2 comic"))
+            assertTrue(genre4String.contains("priority 4"))
+            assertFalse(genre4String.contains("animal planet"))
+            assertTrue(genre4String.contains("love a little"))
+            assertTrue(genre4String.contains("race to victory"))
+            assertFalse(genre4String.contains("cooking mama"))
+            assertFalse(genre4String.contains("anime adventures"))
+        }
+
     }
 }
