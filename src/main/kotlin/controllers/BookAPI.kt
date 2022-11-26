@@ -158,6 +158,23 @@ class BookAPI {
             books.removeAt(indexToDelete)
         } else null
     }
+
+    fun updateBook(indexToUpdate: Int, book: Book?): Boolean {
+        //find the book object by the index number
+        val foundBook = findBook(indexToUpdate)
+
+        //if the book exists, use the book details passed as parameters to update the found book in the ArrayList.
+        if ((foundBook != null) && (book != null)) {
+            foundBook.bookTitle = book.bookTitle
+            foundBook.bookRating = book.bookRating
+            foundBook.bookISBN = book.bookISBN
+            foundBook.bookGenre = book.bookGenre
+            return true
+        }
+
+        //if the book was not found, return false, indicating that the update was not successful
+        return false
+    }
 }
 
 

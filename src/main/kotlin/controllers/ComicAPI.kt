@@ -129,4 +129,20 @@ class ComicAPI {
             comics.removeAt(indexToDelete)
         } else null
     }
+
+    fun updateComic(indexToUpdate: Int, comic: Comic?): Boolean {
+        //find the comic object by the index number
+        val foundComic = findComic(indexToUpdate)
+
+        //if the comic exists, use the comic details passed as parameters to update the found comic in the ArrayList.
+        if ((foundComic != null) && (comic != null)) {
+            foundComic.comicTitle = comic.comicTitle
+            foundComic.comicRating = comic.comicRating
+            foundComic.comicGenre = comic.comicGenre
+            return true
+        }
+
+        //if the comic was not found, return false, indicating that the update was not successful
+        return false
+    }
 }
