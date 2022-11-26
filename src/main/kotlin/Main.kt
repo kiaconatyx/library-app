@@ -1,6 +1,7 @@
 import controllers.BookAPI
 import controllers.ComicAPI
 import models.Book
+import models.Comic
 import mu.KotlinLogging
 import utils.ScannerInput
 import utils.ScannerInput.readNextInt
@@ -80,6 +81,31 @@ fun updateBook(){
 
 fun deleteBook(){
     logger.info { "deleteBook() function invoked" }
+}
+
+fun addComic(){
+    val comicTitle = readNextLine("Enter the comics's title: ")
+    val comicRating = readNextInt("Enter a rating for the comic (1-low, 2, 3, 4, 5-high): ")
+    val comicGenre = readNextLine("Enter a suitable genre for the comic ")
+    val isAdded = comicAPI.add(Comic(comicTitle, comicRating, comicGenre, false))
+
+    if (isAdded) {
+        println("Added Successfully")
+    } else {
+        println("Add Failed")
+    }
+}
+
+fun listComics(){
+    println(comicAPI.listAllComics())
+}
+
+fun updateComic(){
+    logger.info { "updateComic() function invoked" }
+}
+
+fun deleteComic(){
+    logger.info { "deleteComic() function invoked" }
 }
 
 fun exitApp(){
