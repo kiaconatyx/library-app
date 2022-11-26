@@ -80,7 +80,16 @@ fun updateBook(){
 }
 
 fun deleteBook(){
-    logger.info { "deleteBook() function invoked" }
+    listBooks()
+    if (bookAPI.numberOfBooks() > 0) {
+        val indexToDelete = readNextInt("Enter the index of the book to delete: ")
+        val bookToDelete = bookAPI.deleteBook(indexToDelete)
+        if (bookToDelete != null) {
+            println("Delete Successful! Deleted book: ${bookToDelete.bookTitle}")
+        } else {
+            println("Delete NOT Successful")
+        }
+    }
 }
 
 fun addComic(){
@@ -105,7 +114,17 @@ fun updateComic(){
 }
 
 fun deleteComic(){
-    logger.info { "deleteComic() function invoked" }
+    //logger.info { "deleteComic() function invoked" }
+    listComics()
+    if (comicAPI.numberOfComics() > 0) {
+        val indexToDelete = readNextInt("Enter the index of the comic to delete: ")
+        val comicToDelete = comicAPI.deleteComic(indexToDelete)
+        if (comicToDelete != null) {
+            println("Delete Successful! Deleted comic: ${comicToDelete.comicTitle}")
+        } else {
+            println("Delete NOT Successful")
+        }
+    }
 }
 
 fun exitApp(){

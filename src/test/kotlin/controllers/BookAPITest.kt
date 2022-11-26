@@ -2,6 +2,7 @@ package controllers
 
 import models.Book
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import java.util.*
 import kotlin.test.assertEquals
@@ -61,6 +62,26 @@ class BookAPITest {
             assertTrue(emptyBooks!!.add(newBook))
             assertEquals(1, emptyBooks!!.numberOfBooks())
             assertEquals(newBook, emptyBooks!!.findBook(emptyBooks!!.numberOfBooks() - 1))
+        }
+    }
+
+    @Nested
+    inner class DeleteBooks {
+
+        @Test
+        fun `deleting a Book that does not exist, returns null`() {
+            assertNull(emptyBooks!!.deleteBook(0))
+            assertNull(populatedBooks!!.deleteBook(-1))
+            assertNull(populatedBooks!!.deleteBook(5))
+        }
+
+        @Test
+        fun `deleting a book that exists delete and returns deleted object`() {
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            assertEquals(dolphinworld, populatedBooks!!.deleteBook(4))
+            assertEquals(4, populatedBooks!!.numberOfBooks())
+            assertEquals(music101, populatedBooks!!.deleteBook(0))
+            assertEquals(3, populatedBooks!!.numberOfBooks())
         }
     }
 
