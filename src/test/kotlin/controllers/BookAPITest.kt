@@ -1,11 +1,8 @@
 package controllers
 
 import models.Book
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -161,5 +158,44 @@ class BookAPITest {
             assertFalse(rating4String.contains("music 101"))
             assertFalse(rating4String.contains("final fantasy - the world beyond"))
         }
+
+        @Test
+        fun `listBooksBySelectedGenre returns No Books when ArrayList is empty`() {
+            Assertions.assertEquals(0, emptyBooks!!.numberOfBooks())
+            assertTrue(emptyBooks!!.listBooksBySelectedGenre("Work").lowercase().contains("no books")
+            )
+        }
+
+        @Test
+        fun `listBooksBySelectedGenre returns no books when no books of that genre exist`() {
+            //Genre 1 (1 book), 2 (none), 3 (1 book). 4 (2 books), 5 (1 book)
+            Assertions.assertEquals(5, populatedBooks!!.numberOfBooks())
+            val genre2String = populatedBooks!!.listBooksBySelectedGenre("Work").lowercase()
+            assertTrue(genre2String.contains("no books"))
+            assertTrue(genre2String.contains("2"))
+        }
+        @Test
+        fun `listBooksBySelectedGenre returns all books that match that genre when books of that genre exist`() {
+            //Genre 1 (1 book), 2 (none), 3 (1 book). 4 (2 books), 5 (1 book)
+            Assertions.assertEquals(5, populatedBooks!!.numberOfBooks())
+            val genre1String = populatedBooks!!.listBooksBySelectedGenre("Hobby").lowercase()
+            assertTrue(genre1String.contains("1 book"))
+            assertTrue(genre1String.contains("genre 1"))
+            assertTrue(genre1String.contains("cooking for dummies"))
+            assertFalse(genre1String.contains("dolphin world"))
+            assertFalse(genre1String.contains("music 101"))
+            assertFalse(genre1String.contains("learn to code"))
+            assertFalse(genre1String.contains("final fantasy - the world beyond"))
+
+            val genre4String = populatedBooks!!.listBooksBySelectedGenre("Work").lowercase()
+            assertTrue(genre4String.contains("2 book"))
+            assertTrue(genre4String.contains("priority 4"))
+            assertFalse(genre4String.contains("dolphin world"))
+            assertTrue(genre4String.contains("learn to code"))
+            assertTrue(genre4String.contains("final fantasy - the world beyond"))
+            assertFalse(genre4String.contains("music 101"))
+            assertFalse(genre4String.contains("cooking for dummies"))
+        }
+
     }
 }
