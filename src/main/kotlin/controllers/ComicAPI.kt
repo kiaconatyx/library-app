@@ -35,4 +35,52 @@ class ComicAPI {
     fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
     }
+
+    fun listActiveComics(): String {
+        return if (numberOfActiveComics() == 0) {
+            "No active comics here"
+        } else {
+            var listOfActiveComics = ""
+            for (comic in comics) {
+                if (!comic.isComicArchived) {
+                    listOfActiveComics += "${comics.indexOf(comic)}: $comic \n"
+                }
+            }
+            listOfActiveComics
+        }
+    }
+
+    fun listArchivedComics(): String {
+        return if (numberOfArchivedComics() == 0) {
+            "No archived comics are found"
+        } else {
+            var listOfArchivedComics = ""
+            for (comic in comics) {
+                if (comic.isComicArchived) {
+                    listOfArchivedComics += "${comics.indexOf(comic)}: $comic \n"
+                }
+            }
+            listOfArchivedComics
+        }
+    }
+
+    fun numberOfArchivedComics(): Int {
+        var counter = 0
+        for (comic in comics) {
+            if (comic.isComicArchived) {
+                counter++
+            }
+        }
+        return counter
+    }
+
+    fun numberOfActiveComics(): Int {
+        var counter = 0
+        for (comic in comics) {
+            if (!comic.isComicArchived) {
+                counter++
+            }
+        }
+        return counter
+    }
 }
