@@ -119,8 +119,14 @@ class ComicAPI {
         else {
             val listOfComics = formatListString(comics.filter{ comic -> comic.comicGenre == cat})
             if (listOfComics.equals("")) "No comics with genre: $cat"
-            else "${numberOfComicsbyGenre(cat)} comics with genre $cat: $listOfComics"
+            else "${numberOfComicsByGenre(cat)} comics with genre $cat: $listOfComics"
         }
 
     fun numberOfComicsByGenre(cat: String): Int = comics.count { p: Comic -> p.comicGenre == cat }
+
+    fun deleteComic(indexToDelete: Int): Comic? {
+        return if (isValidListIndex(indexToDelete, comics)) {
+            comics.removeAt(indexToDelete)
+        } else null
+    }
 }

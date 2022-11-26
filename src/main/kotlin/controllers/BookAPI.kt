@@ -152,4 +152,12 @@ class BookAPI {
         }
 
     fun numberOfBooksByGenre(cat: String): Int = books.count { p: Book -> p.bookGenre == cat }
+
+    fun deleteBook(indexToDelete: Int): Book? {
+        return if (isValidListIndex(indexToDelete, books)) {
+            books.removeAt(indexToDelete)
+        } else null
+    }
 }
+
+
