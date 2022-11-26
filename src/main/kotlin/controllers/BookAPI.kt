@@ -33,4 +33,52 @@ class BookAPI {
     fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
     }
+
+    fun listActiveBooks(): String {
+        return if (numberOfActiveBooks() == 0) {
+            "No active books seem to be stored here"
+        } else {
+            var listOfActiveBooks = ""
+            for (book in books) {
+                if (!book.isBookArchived) {
+                    listOfActiveBooks += "${books.indexOf(book)}: $book \n"
+                }
+            }
+            listOfActiveBooks
+        }
+    }
+
+    fun listArchivedBooks(): String {
+        return if (numberOfArchivedBooks() == 0) {
+            "No archived books to see here"
+        } else {
+            var listOfArchivedBooks = ""
+            for (book in books) {
+                if (book.isBookArchived) {
+                    listOfArchivedBooks += "${books.indexOf(book)}: $book \n"
+                }
+            }
+            listOfArchivedBooks
+        }
+    }
+
+    fun numberOfArchivedBooks(): Int {
+        var counter = 0
+        for (book in books) {
+            if (book.isBookArchived) {
+                counter++
+            }
+        }
+        return counter
+    }
+
+    fun numberOfActiveBooks(): Int {
+        var counter = 0
+        for (book in books) {
+            if (!book.isBookArchived) {
+                counter++
+            }
+        }
+        return counter
+    }
 }
