@@ -271,6 +271,26 @@ fun archiveComic() {
     }
 }
 
+fun searchBooks() {
+    val searchTitle = readNextLine("Enter the description to search by: ")
+    val searchResults = bookAPI.searchByTitle(searchTitle)
+    if (searchResults.isEmpty()) {
+        println("No books found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun searchComics() {
+    val searchTitle = readNextLine("Enter the description to search by: ")
+    val searchResults = comicAPI.searchByTitle(searchTitle)
+    if (searchResults.isEmpty()) {
+        println("No comics found")
+    } else {
+        println(searchResults)
+    }
+}
+
 fun save() {
     try {
         bookAPI.store()
