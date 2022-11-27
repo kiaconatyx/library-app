@@ -428,5 +428,43 @@ class BookAPITest {
             assertEquals(0, emptyBooks!!.numberOfBooksByISBN(1))
         }
     }
+
+    @Nested
+    inner class SearchMethods {
+
+        @Test
+        fun `search books by title returns no books when no books with that title exist`() {
+            //Searching a populated collection for a title that doesn't exist.
+            Assertions.assertEquals(5, populatedBooks!!.numberOfBooks())
+            val searchResults = populatedBooks!!.searchByTitle("no results expected")
+            assertTrue(searchResults.isEmpty())
+
+            //Searching an empty collection
+            Assertions.assertEquals(0, emptyBooks!!.numberOfBooks())
+            assertTrue(emptyBooks!!.searchByTitle("").isEmpty())
+        }
+
+        @Test
+        fun `search books by title returns books when books with that title exist`() {
+            Assertions.assertEquals(5, populatedBooks!!.numberOfBooks())
+
+            //Searching a populated collection for a full title that exists (case matches exactly)
+            var searchResults = populatedBooks!!.searchByTitle("Learn To Code")
+            assertTrue(searchResults.contains("Learn To Code"))
+            assertFalse(searchResults.contains("Cooking for Dummies"))
+
+            //Searching a populated collection for a partial title that exists (case matches exactly)
+            searchResults = populatedBooks!!.searchByTitle("Do")
+            assertTrue(searchResults.contains("Learn To Code"))
+            assertTrue(searchResults.contains("Dolphin World"))
+            assertFalse(searchResults.contains("Cooking for Dummies"))
+
+            //Searching a populated collection for a partial title that exists (case doesn't match)
+            searchResults = populatedBooks!!.searchByTitle("F")
+            assertTrue(searchResults.contains("Final Fantasy"))
+            assertTrue(searchResults.contains("Cooking For Dummies"))
+            assertFalse(searchResults.contains("Dolphin World"))
+        }
+    }
     
 }

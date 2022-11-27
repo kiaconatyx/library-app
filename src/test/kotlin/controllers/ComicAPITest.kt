@@ -387,4 +387,42 @@ class ComicAPITest {
 
     }
 
+    @Nested
+    inner class SearchMethods {
+
+        @Test
+        fun `search comics by title returns no comics when no comics with that title exist`() {
+            //Searching a populated collection for a title that doesn't exist.
+            Assertions.assertEquals(5, populatedComics!!.numberOfComics())
+            val searchResults = populatedComics!!.searchByTitle("no results expected")
+            assertTrue(searchResults.isEmpty())
+
+            //Searching an empty collection
+            Assertions.assertEquals(0, emptyComics!!.numberOfComics())
+            assertTrue(emptyComics!!.searchByTitle("").isEmpty())
+        }
+
+        @Test
+        fun `search comics by title returns comics when comics with that title exist`() {
+            Assertions.assertEquals(5, populatedComics!!.numberOfComics())
+
+            //Searching a populated collection for a full title that exists (case matches exactly)
+            var searchResults = populatedComics!!.searchByTitle("Animal Planet")
+            assertTrue(searchResults.contains("Animal Planet"))
+            assertFalse(searchResults.contains("Test App"))
+
+            //Searching a populated collection for a partial title that exists (case matches exactly)
+            searchResults = populatedComics!!.searchByTitle("ani")
+            assertTrue(searchResults.contains("anime adventures"))
+            assertTrue(searchResults.contains("animal planet"))
+            assertFalse(searchResults.contains("love a little"))
+
+            //Searching a populated collection for a partial title that exists (case doesn't match)
+            searchResults = populatedComics!!.searchByTitle("ann")
+            assertTrue(searchResults.contains("animal planet"))
+            assertTrue(searchResults.contains("anime adventure"))
+            assertFalse(searchResults.contains("race to victory"))
+        }
+    }
+
 }
