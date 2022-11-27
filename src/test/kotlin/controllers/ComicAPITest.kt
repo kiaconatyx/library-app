@@ -383,4 +383,5 @@ class ComicAPITest {
             assertEquals(0, emptyComics!!.numberOfComicsByRating(1))
         }
     }
+
 }

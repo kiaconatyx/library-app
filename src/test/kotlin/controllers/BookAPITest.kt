@@ -387,7 +387,6 @@ class BookAPITest {
         }
 
     }
-
     @Nested
     inner class CountingMethods {
 
@@ -418,5 +417,16 @@ class BookAPITest {
             assertEquals(1, populatedBooks!!.numberOfBooksByRating(5))
             assertEquals(0, emptyBooks!!.numberOfBooksByRating(1))
         }
+
+        @Test
+        fun numberOfBooksByISBNCalculatedCorrectly() {
+            assertEquals(1, populatedBooks!!.numberOfBooksByISBN(1))
+            assertEquals(0, populatedBooks!!.numberOfBooksByISBN(2))
+            assertEquals(1, populatedBooks!!.numberOfBooksByISBN(3))
+            assertEquals(2, populatedBooks!!.numberOfBooksByISBN(4))
+            assertEquals(1, populatedBooks!!.numberOfBooksByISBN(5))
+            assertEquals(0, emptyBooks!!.numberOfBooksByISBN(1))
+        }
     }
+    
 }
