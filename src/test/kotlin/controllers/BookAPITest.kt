@@ -192,6 +192,29 @@ class BookAPITest {
             assertEquals(storingBooks.findBook(2), loadedBooks.findBook(2))
         }
     }
+
+    @Nested
+    inner class ArchiveBooks {
+        @Test
+        fun `archiving a book that does not exist returns false`(){
+            assertFalse(populatedBooks!!.archiveBook(6))
+            assertFalse(populatedBooks!!.archiveBook(-1))
+            assertFalse(emptyBooks!!.archiveBook(0))
+        }
+
+        @Test
+        fun `archiving an already archived book returns false`(){
+            assertTrue(populatedBooks!!.findBook(2)!!.isBookArchived)
+            assertFalse(populatedBooks!!.archiveBook(2))
+        }
+
+        @Test
+        fun `archiving an active book that exists returns true and archives`() {
+            assertFalse(populatedBooks!!.findBook(1)!!.isBookArchived)
+            assertTrue(populatedBooks!!.archiveBook(1))
+            assertTrue(populatedBooks!!.findBook(1)!!.isBookArchived)
+        }
+    }
     @Nested
     inner class ListBooks {
         @Test

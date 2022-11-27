@@ -116,7 +116,16 @@ class ComicAPI(serializerType: Serializer){
         }
         return counter
     }
-
+    fun archiveComic(indexToArchive: Int): Boolean {
+        if (isValidIndex(indexToArchive)) {
+            val comicToArchive = comics[indexToArchive]
+            if (!comicToArchive.isComicArchived) {
+                comicToArchive.isComicArchived = true
+                return true
+            }
+        }
+        return false
+    }
     fun listComicsBySelectedGenre(cat: String): String =
         if (comics.isEmpty()) "No Comics Stored"
         else {
