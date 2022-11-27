@@ -4,6 +4,7 @@ import models.Book
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
+import persistence.JSONSerializer
 import persistence.XMLSerializer
 import java.io.File
 import java.util.*
@@ -145,6 +146,44 @@ class BookAPITest {
             loadedBooks.load()
 
             //Comparing the source of the books (storingBooks) with the XML loaded books (loadedBooks)
+            assertEquals(3, storingBooks.numberOfBooks())
+            assertEquals(3, loadedBooks.numberOfBooks())
+            assertEquals(storingBooks.numberOfBooks(), loadedBooks.numberOfBooks())
+            assertEquals(storingBooks.findBook(0), loadedBooks.findBook(0))
+            assertEquals(storingBooks.findBook(1), loadedBooks.findBook(1))
+            assertEquals(storingBooks.findBook(2), loadedBooks.findBook(2))
+        }
+
+        @Test
+        fun `saving and loading an empty collection in JSON doesn't crash app`() {
+            // Saving an empty books.json file.
+            val storingBooks = BookAPI(JSONSerializer(File("books.json")))
+            storingBooks.store()
+
+            //Loading the empty books.json file into a new object
+            val loadedBooks = BookAPI(JSONSerializer(File("books.json")))
+            loadedBooks.load()
+
+            //Comparing the source of the books (storingBooks) with the json loaded books (loadedBooks)
+            assertEquals(0, storingBooks.numberOfBooks())
+            assertEquals(0, loadedBooks.numberOfBooks())
+            assertEquals(storingBooks.numberOfBooks(), loadedBooks.numberOfBooks())
+        }
+
+        @Test
+        fun `saving and loading an loaded collection in JSON doesn't loose data`() {
+            // Storing 3 books to the books.json file.
+            val storingBooks = BookAPI(JSONSerializer(File("books.json")))
+            storingBooks.add(music101!!)
+            storingBooks.add(dolphinworld!!)
+            storingBooks.add(cookingfordummies!!)
+            storingBooks.store()
+
+            //Loading books.json into a different collection
+            val loadedBooks = BookAPI(JSONSerializer(File("books.json")))
+            loadedBooks.load()
+
+            //Comparing the source of the books (storingBooks) with the json loaded books (loadedBooks)
             assertEquals(3, storingBooks.numberOfBooks())
             assertEquals(3, loadedBooks.numberOfBooks())
             assertEquals(storingBooks.numberOfBooks(), loadedBooks.numberOfBooks())
