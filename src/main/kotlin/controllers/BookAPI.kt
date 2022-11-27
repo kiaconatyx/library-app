@@ -24,9 +24,7 @@ class BookAPI(serializerType: Serializer){
         }
     }
 
-    fun numberOfBooks(): Int {
-        return books.size
-    }
+
 
     fun findBook(index: Int): Book? {
         return if (isValidListIndex(index, books)) {
@@ -66,22 +64,9 @@ class BookAPI(serializerType: Serializer){
         }
     }
 
-    fun numberOfArchivedBooks(): Int {
-        var counter = 0
-        for (book in books) {
-            if (book.isBookArchived) {
-                counter++
-            }
-        }
-        return counter
-    }
 
-    fun numberOfActiveBooks(): Int {
-        return books.stream()
-            .filter{book: Book -> !book.isBookArchived}
-            .count()
-            .toInt()
-    }
+
+
 
     fun listBooksBySelectedRating(rating: Int): String {
         return if (books.isEmpty()) {
@@ -103,15 +88,6 @@ class BookAPI(serializerType: Serializer){
         }
     }
 
-    fun numberOfBooksByRating(rating: Int): Int {
-        var counter = 0
-        for (book in books) {
-            if (book.bookRating == rating) {
-                counter++
-            }
-        }
-        return counter
-    }
 
     fun listBooksBySelectedISBN(ISBN: Int): String {
         return if (books.isEmpty()) {
@@ -133,15 +109,7 @@ class BookAPI(serializerType: Serializer){
         }
     }
 
-    fun numberOfBooksByISBN(ISBN: Int): Int {
-        var counter = 0
-        for (book in books) {
-            if (book.bookISBN == ISBN) {
-                counter++
-            }
-        }
-        return counter
-    }
+
     fun archiveBook(indexToArchive: Int): Boolean {
         if (isValidIndex(indexToArchive)) {
             val bookToArchive = books[indexToArchive]
@@ -160,7 +128,14 @@ class BookAPI(serializerType: Serializer){
             else "${numberOfBooksByGenre(cat)} books with genre $cat: $listOfBooks"
         }
 
+    fun numberOfBooks(): Int = books.size
+    fun numberOfActiveBooks(): Int = books.count{book: Book -> !book.isBookArchived}
+    fun numberOfArchivedBooks(): Int = books.count{book: Book -> book.isBookArchived}
+    fun numberOfBooksByRating(rating: Int): Int = books.count { p: Book -> p.bookRating == rating }
+
     fun numberOfBooksByGenre(cat: String): Int = books.count { p: Book -> p.bookGenre == cat }
+
+    fun numberOfBooksByISBN(ISBN: Int): Int = books.count { p: Book -> p.bookISBN == ISBN }
 
     fun deleteBook(indexToDelete: Int): Book? {
         return if (isValidListIndex(indexToDelete, books)) {
