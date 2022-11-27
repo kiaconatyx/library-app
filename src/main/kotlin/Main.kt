@@ -33,14 +33,18 @@ fun mainMenu() : Int {
          > |   2) List all books            |
          > |   3) Update a book             |
          > |   4) Delete a book             |
+         > |   5) Archive a book            |
          > ----------------------------------
          > | Comic MENU                     |
-         > |   5) Add a Comic               |
-         > |   6) List all Comics           |
-         > |   7) Update a Comic            |
-         > |   8) Delete a Comic            |
+         > |   6) Add a Comic               |
+         > |   7) List all Comics           |
+         > |   8) Update a Comic            |
+         > |   9) Delete a Comic            |
+         > |   10) Archive a Comic          |
          > ----------------------------------
          > ----------------------------------
+         > |   20) Save                     |
+         > |   21) Load                     |
          > |   0) Exit                      |
          > ----------------------------------
         > ==>> """.trimMargin(">"))
@@ -54,10 +58,14 @@ fun runMenu() {
             2  -> listBooks()
             3  -> updateBook()
             4  -> deleteBook()
-            5  -> addComic()
-            6  -> listComics()
-            7  -> updateComic()
-            8  -> deleteComic()
+            5 -> archiveBook()
+            6  -> addComic()
+            7  -> listComics()
+            8  -> updateComic()
+            9  -> deleteComic()
+            10 -> archiveComic()
+            20 -> save()
+            21 -> load()
             0  -> exitApp()
             else -> println("Invalid option entered: ${option}")
         }
@@ -171,6 +179,42 @@ fun deleteComic(){
             println("Delete Successful! Deleted comic: ${comicToDelete.comicTitle}")
         } else {
             println("Delete NOT Successful")
+        }
+    }
+}
+
+fun listActiveBooks() {
+    println(bookAPI.listActiveBooks())
+}
+
+fun archiveBook() {
+    listActiveBooks()
+    if (bookAPI.numberOfActiveBooks() > 0) {
+        //only ask the user to choose the book to archive if active books exist
+        val indexToArchive = readNextInt("Enter the index of the book to archive: ")
+        //pass the index of the book to BookAPI for archiving and check for success.
+        if (bookAPI.archiveBook(indexToArchive)) {
+            println("Archive Successful!")
+        } else {
+            println("Archive NOT Successful")
+        }
+    }
+}
+
+fun listActiveComics() {
+    println(comicAPI.listActiveComics())
+}
+
+fun archiveComic() {
+    listActiveComics()
+    if (comicAPI.numberOfActiveComics() > 0) {
+        //only ask the user to choose the comic to archive if active comics exist
+        val indexToArchive = readNextInt("Enter the index of the comic to archive: ")
+        //pass the index of the comic to ComicAPI for archiving and check for success.
+        if (comicAPI.archiveComic(indexToArchive)) {
+            println("Archive Successful!")
+        } else {
+            println("Archive NOT Successful")
         }
     }
 }
