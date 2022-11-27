@@ -77,13 +77,10 @@ class BookAPI(serializerType: Serializer){
     }
 
     fun numberOfActiveBooks(): Int {
-        var counter = 0
-        for (book in books) {
-            if (!book.isBookArchived) {
-                counter++
-            }
-        }
-        return counter
+        return books.stream()
+            .filter{book: Book -> !book.isBookArchived}
+            .count()
+            .toInt()
     }
 
     fun listBooksBySelectedRating(rating: Int): String {

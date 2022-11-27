@@ -78,13 +78,10 @@ class ComicAPI(serializerType: Serializer){
     }
 
     fun numberOfActiveComics(): Int {
-        var counter = 0
-        for (comic in comics) {
-            if (!comic.isComicArchived) {
-                counter++
-            }
-        }
-        return counter
+        return comics.stream()
+            .filter{comic: Comic -> !comic.isComicArchived}
+            .count()
+            .toInt()
     }
 
     fun listComicsBySelectedRating(rating: Int): String {
