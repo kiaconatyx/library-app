@@ -122,6 +122,11 @@ class BookAPI(serializerType: Serializer){
     fun store() {
         serializer.write(books)
     }
+
+    private fun formatListString(booksToFormat : List<Book>) : String =
+        booksToFormat
+            .joinToString (separator = "\n") { book ->
+                books.indexOf(book).toString() + ": " + book.toString() }
 }
 
 

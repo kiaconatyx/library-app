@@ -112,4 +112,9 @@ class ComicAPI(serializerType: Serializer){
     fun store() {
         serializer.write(comics)
     }
+
+    private fun formatListString(comicsToFormat : List<Comic>) : String =
+        comicsToFormat
+            .joinToString (separator = "\n") { comic ->
+                comics.indexOf(comic).toString() + ": " + comic.toString() }
 }
