@@ -15,8 +15,7 @@ class XMLSerializer(private val file: File) : Serializer {
     @Throws(Exception::class)
     override fun read(): Any {
         val xStream = XStream(DomDriver())
-        xStream.allowTypes(arrayOf(Book::class.java))
-        xStream.allowTypes(arrayOf(Comic::class.java))
+        xStream.allowTypes(arrayOf(Book::class.java,Comic::class.java))
         val inputStream = xStream.createObjectInputStream(FileReader(file))
         val obj = inputStream.readObject() as Any
         inputStream.close()
