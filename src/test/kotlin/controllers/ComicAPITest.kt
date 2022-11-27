@@ -351,4 +351,40 @@ class ComicAPITest {
         }
 
     }
+
+    @Nested
+    inner class CountingMethods {
+
+        @Test
+        fun numberOfComicsCalculatedCorrectly() {
+            assertEquals(5, populatedComics!!.numberOfComics())
+            assertEquals(0, emptyComics!!.numberOfComics())
+        }
+
+        @Test
+        fun numberOfArchivedComicsCalculatedCorrectly() {
+            assertEquals(2, populatedComics!!.numberOfArchivedComics())
+            assertEquals(0, emptyComics!!.numberOfArchivedComics())
+        }
+
+        @Test
+        fun numberOfActiveComicsCalculatedCorrectly() {
+            assertEquals(3, populatedComics!!.numberOfActiveComics())
+            assertEquals(0, emptyComics!!.numberOfActiveComics())
+        }
+
+
+
+        @Test
+        fun numberOfComicsByRatingCalculatedCorrectly() {
+            assertEquals(1, populatedComics!!.numberOfComicsByRating(1))
+            assertEquals(0, populatedComics!!.numberOfComicsByRating(2))
+            assertEquals(1, populatedComics!!.numberOfComicsByRating(3))
+            assertEquals(2, populatedComics!!.numberOfComicsByRating(4))
+            assertEquals(1, populatedComics!!.numberOfComicsByRating(5))
+            assertEquals(0, emptyComics!!.numberOfComicsByRating(1))
+        }
+
+    }
+
 }

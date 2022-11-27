@@ -387,4 +387,46 @@ class BookAPITest {
         }
 
     }
+    @Nested
+    inner class CountingMethods {
+
+        @Test
+        fun numberOfBooksCalculatedCorrectly() {
+            assertEquals(5, populatedBooks!!.numberOfBooks())
+            assertEquals(0, emptyBooks!!.numberOfBooks())
+        }
+
+        @Test
+        fun numberOfArchivedBooksCalculatedCorrectly() {
+            assertEquals(2, populatedBooks!!.numberOfArchivedBooks())
+            assertEquals(0, emptyBooks!!.numberOfArchivedBooks())
+        }
+
+        @Test
+        fun numberOfActiveBooksCalculatedCorrectly() {
+            assertEquals(3, populatedBooks!!.numberOfActiveBooks())
+            assertEquals(0, emptyBooks!!.numberOfActiveBooks())
+        }
+
+        @Test
+        fun numberOfBooksByRatingCalculatedCorrectly() {
+            assertEquals(1, populatedBooks!!.numberOfBooksByRating(1))
+            assertEquals(0, populatedBooks!!.numberOfBooksByRating(2))
+            assertEquals(1, populatedBooks!!.numberOfBooksByRating(3))
+            assertEquals(2, populatedBooks!!.numberOfBooksByRating(4))
+            assertEquals(1, populatedBooks!!.numberOfBooksByRating(5))
+            assertEquals(0, emptyBooks!!.numberOfBooksByRating(1))
+        }
+
+        @Test
+        fun numberOfBooksByISBNCalculatedCorrectly() {
+            assertEquals(1, populatedBooks!!.numberOfBooksByISBN(1))
+            assertEquals(0, populatedBooks!!.numberOfBooksByISBN(2))
+            assertEquals(1, populatedBooks!!.numberOfBooksByISBN(3))
+            assertEquals(2, populatedBooks!!.numberOfBooksByISBN(4))
+            assertEquals(1, populatedBooks!!.numberOfBooksByISBN(5))
+            assertEquals(0, emptyBooks!!.numberOfBooksByISBN(1))
+        }
+    }
+    
 }

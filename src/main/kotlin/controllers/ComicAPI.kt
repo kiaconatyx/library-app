@@ -24,9 +24,6 @@ class ComicAPI(serializerType: Serializer){
         }
     }
 
-    fun numberOfComics(): Int {
-        return comics.size
-    }
 
     fun findComic(index: Int): Comic? {
         return if (isValidListIndex(index, comics)) {
@@ -67,25 +64,8 @@ class ComicAPI(serializerType: Serializer){
         }
     }
 
-    fun numberOfArchivedComics(): Int {
-        var counter = 0
-        for (comic in comics) {
-            if (comic.isComicArchived) {
-                counter++
-            }
-        }
-        return counter
-    }
 
-    fun numberOfActiveComics(): Int {
-        var counter = 0
-        for (comic in comics) {
-            if (!comic.isComicArchived) {
-                counter++
-            }
-        }
-        return counter
-    }
+
 
     fun listComicsBySelectedRating(rating: Int): String {
         return if (comics.isEmpty()) {
@@ -107,15 +87,7 @@ class ComicAPI(serializerType: Serializer){
         }
     }
 
-    fun numberOfComicsByRating(rating: Int): Int {
-        var counter = 0
-        for (comic in comics) {
-            if (comic.comicRating == rating) {
-                counter++
-            }
-        }
-        return counter
-    }
+
     fun archiveComic(indexToArchive: Int): Boolean {
         if (isValidIndex(indexToArchive)) {
             val comicToArchive = comics[indexToArchive]
@@ -134,6 +106,11 @@ class ComicAPI(serializerType: Serializer){
             else "${numberOfComicsByGenre(cat)} comics with genre $cat: $listOfComics"
         }
 
+
+    fun numberOfComics(): Int = comics.size
+    fun numberOfActiveComics(): Int = comics.count{comic: Comic -> !comic.isComicArchived}
+    fun numberOfArchivedComics(): Int = comics.count{comic: Comic -> comic.isComicArchived}
+    fun numberOfComicsByRating(rating: Int): Int = comics.count { p: Comic -> p.comicRating == rating }
     fun numberOfComicsByGenre(cat: String): Int = comics.count { p: Comic -> p.comicGenre == cat }
 
     fun deleteComic(indexToDelete: Int): Comic? {
