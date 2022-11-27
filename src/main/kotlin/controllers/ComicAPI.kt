@@ -1,8 +1,11 @@
 package controllers
 
 import models.Comic
+import persistence.Serializer
 
-class ComicAPI {
+class ComicAPI(serializerType: Serializer){
+
+    private var serializer: Serializer = serializerType
     private var comics = ArrayList<Comic>()
 
     fun add(comic: Comic): Boolean {
@@ -148,5 +151,15 @@ class ComicAPI {
 
     fun isValidIndex(index: Int) :Boolean{
         return isValidListIndex(index, comics);
+    }
+
+    @Throws(Exception::class)
+    fun load() {
+        comics = serializer.read() as ArrayList<Comic>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(comics)
     }
 }

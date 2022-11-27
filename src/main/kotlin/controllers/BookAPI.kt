@@ -1,9 +1,12 @@
 package controllers
-
+import persistence.XMLSerializer
 import models.Book
-import models.Comic
+import persistence.Serializer
 
-class BookAPI {
+
+class BookAPI(serializerType: Serializer){
+
+    private var serializer: Serializer = serializerType
     private var books = ArrayList<Book>()
 
     fun add(book: Book): Boolean {
@@ -178,6 +181,16 @@ class BookAPI {
 
     fun isValidIndex(index: Int) :Boolean{
         return isValidListIndex(index, books);
+    }
+
+    @Throws(Exception::class)
+    fun load() {
+        books = serializer.read() as ArrayList<Book>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(books)
     }
 }
 

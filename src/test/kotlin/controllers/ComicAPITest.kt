@@ -4,6 +4,9 @@ import models.Comic
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
+import persistence.JSONSerializer
+import persistence.XMLSerializer
+import java.io.File
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -15,8 +18,8 @@ class ComicAPITest {
     private var lovealittle: Comic? = null
     private var cookingmama: Comic? = null
     private var animalplanet: Comic? = null
-    private var populatedComics: ComicAPI? = ComicAPI()
-    private var emptyComics: ComicAPI? = ComicAPI()
+    private var populatedComics: ComicAPI? = ComicAPI(XMLSerializer(File("comics.xml")))
+    private var emptyComics: ComicAPI? = ComicAPI(XMLSerializer(File("comics.xml")))
 
     @BeforeEach
     fun setup() {
@@ -107,6 +110,86 @@ class ComicAPITest {
             assertEquals("Updating Comic", populatedComics!!.findComic(4)!!.comicTitle)
             assertEquals(2, populatedComics!!.findComic(4)!!.comicRating)
             assertEquals("Fantasy", populatedComics!!.findComic(4)!!.comicGenre)
+        }
+    }
+
+    @Nested
+    inner class PersistenceTests {
+
+        @Test
+        fun `saving and loading an empty collection in XML doesn't crash app`() {
+            // Saving an empty comics.XML file.
+            val storingComics = ComicAPI(XMLSerializer(File("comics.xml")))
+            storingComics.store()
+
+            //Loading the empty comics.xml file into a new object
+            val loadedComics = ComicAPI(XMLSerializer(File("comics.xml")))
+            loadedComics.load()
+
+            //Comparing the source of the comics (storingComics) with the XML loaded comics (loadedComics)
+            assertEquals(0, storingComics.numberOfComics())
+            assertEquals(0, loadedComics.numberOfComics())
+            assertEquals(storingComics.numberOfComics(), loadedComics.numberOfComics())
+        }
+
+        @Test
+        fun `saving and loading an loaded collection in XML doesn't loose data`() {
+            // Storing 3 comics to the comics.XML file.
+            val storingComics = ComicAPI(XMLSerializer(File("comics.xml")))
+            storingComics.add(animeadventures!!)
+            storingComics.add(animalplanet!!)
+            storingComics.add(cookingmama!!)
+            storingComics.store()
+
+            //Loading comics.xml into a different collection
+            val loadedComics = ComicAPI(XMLSerializer(File("comics.xml")))
+            loadedComics.load()
+
+            //Comparing the source of the comics (storingComics) with the XML loaded comics (loadedComics)
+            assertEquals(3, storingComics.numberOfComics())
+            assertEquals(3, loadedComics.numberOfComics())
+            assertEquals(storingComics.numberOfComics(), loadedComics.numberOfComics())
+            assertEquals(storingComics.findComic(0), loadedComics.findComic(0))
+            assertEquals(storingComics.findComic(1), loadedComics.findComic(1))
+            assertEquals(storingComics.findComic(2), loadedComics.findComic(2))
+        }
+
+        @Test
+        fun `saving and loading an empty collection in JSON doesn't crash app`() {
+            // Saving an empty comics.json file.
+            val storingComics = ComicAPI(JSONSerializer(File("comics.json")))
+            storingComics.store()
+
+            //Loading the empty comics.json file into a new object
+            val loadedComics = ComicAPI(JSONSerializer(File("comics.json")))
+            loadedComics.load()
+
+            //Comparing the source of the comics (storingComics) with the json loaded comics (loadedComics)
+            assertEquals(0, storingComics.numberOfComics())
+            assertEquals(0, loadedComics.numberOfComics())
+            assertEquals(storingComics.numberOfComics(), loadedComics.numberOfComics())
+        }
+
+        @Test
+        fun `saving and loading an loaded collection in JSON doesn't loose data`() {
+            // Storing 3 comics to the comics.json file.
+            val storingComics = ComicAPI(JSONSerializer(File("comics.json")))
+            storingComics.add(animeadventures!!)
+            storingComics.add(cookingmama!!)
+            storingComics.add(animalplanet!!)
+            storingComics.store()
+
+            //Loading comics.json into a different collection
+            val loadedComics = ComicAPI(JSONSerializer(File("comics.json")))
+            loadedComics.load()
+
+            //Comparing the source of the comics (storingComics) with the json loaded comics (loadedComics)
+            assertEquals(3, storingComics.numberOfComics())
+            assertEquals(3, loadedComics.numberOfComics())
+            assertEquals(storingComics.numberOfComics(), loadedComics.numberOfComics())
+            assertEquals(storingComics.findComic(0), loadedComics.findComic(0))
+            assertEquals(storingComics.findComic(1), loadedComics.findComic(1))
+            assertEquals(storingComics.findComic(2), loadedComics.findComic(2))
         }
     }
     @Nested
