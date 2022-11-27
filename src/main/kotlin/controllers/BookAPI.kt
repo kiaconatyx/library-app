@@ -90,7 +90,8 @@ class BookAPI(serializerType: Serializer){
             books.removeAt(indexToDelete)
         } else null
     }
-
+    fun searchByTitle(searchString : String) =
+        formatListString(books.filter { book -> book.bookTitle.contains(searchString, ignoreCase = true)})
     fun updateBook(indexToUpdate: Int, book: Book?): Boolean {
         //find the book object by the index number
         val foundBook = findBook(indexToUpdate)
