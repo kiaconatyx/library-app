@@ -145,7 +145,16 @@ class BookAPI(serializerType: Serializer){
         }
         return counter
     }
-
+    fun archiveBook(indexToArchive: Int): Boolean {
+        if (isValidIndex(indexToArchive)) {
+            val bookToArchive = books[indexToArchive]
+            if (!bookToArchive.isBookArchived) {
+                bookToArchive.isBookArchived = true
+                return true
+            }
+        }
+        return false
+    }
     fun listBooksBySelectedGenre(cat: String): String =
         if (books.isEmpty()) "No Books are Stored"
         else {
