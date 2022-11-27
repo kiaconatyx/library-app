@@ -1,9 +1,12 @@
 package controllers
 import persistence.XMLSerializer
 import models.Book
+import persistence.Serializer
 
 
-class BookAPI {
+class BookAPI(serializerType: Serializer){
+
+    private var serializer: Serializer = serializerType
     private var books = ArrayList<Book>()
 
     fun add(book: Book): Boolean {

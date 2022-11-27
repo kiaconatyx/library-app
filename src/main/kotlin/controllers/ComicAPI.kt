@@ -1,8 +1,11 @@
 package controllers
 
 import models.Comic
+import persistence.Serializer
 
-class ComicAPI {
+class ComicAPI(serializerType: Serializer){
+
+    private var serializer: Serializer = serializerType
     private var comics = ArrayList<Comic>()
 
     fun add(comic: Comic): Boolean {
