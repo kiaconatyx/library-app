@@ -12,18 +12,6 @@ class ComicAPI(serializerType: Serializer){
         return comics.add(comic)
     }
 
-    fun listAllComics(): String {
-        return if (comics.isEmpty()) {
-            "No comics stored"
-        } else {
-            var listOfComics = ""
-            for (i in comics.indices) {
-                listOfComics += "${i}: ${comics[i]} \n"
-            }
-            listOfComics
-        }
-    }
-
 
     fun findComic(index: Int): Comic? {
         return if (isValidListIndex(index, comics)) {
@@ -36,56 +24,10 @@ class ComicAPI(serializerType: Serializer){
         return (index >= 0 && index < list.size)
     }
 
-    fun listActiveComics(): String {
-        return if (numberOfActiveComics() == 0) {
-            "No active comics here"
-        } else {
-            var listOfActiveComics = ""
-            for (comic in comics) {
-                if (!comic.isComicArchived) {
-                    listOfActiveComics += "${comics.indexOf(comic)}: $comic \n"
-                }
-            }
-            listOfActiveComics
-        }
-    }
-
-    fun listArchivedComics(): String {
-        return if (numberOfArchivedComics() == 0) {
-            "No archived comics are found"
-        } else {
-            var listOfArchivedComics = ""
-            for (comic in comics) {
-                if (comic.isComicArchived) {
-                    listOfArchivedComics += "${comics.indexOf(comic)}: $comic \n"
-                }
-            }
-            listOfArchivedComics
-        }
-    }
 
 
 
 
-    fun listComicsBySelectedRating(rating: Int): String {
-        return if (comics.isEmpty()) {
-            "No comics stored"
-        } else {
-            var listOfComics = ""
-            for (i in comics.indices) {
-                if (comics[i].comicRating == rating) {
-                    listOfComics +=
-                        """$i: ${comics[i]}
-                        """.trimIndent()
-                }
-            }
-            if (listOfComics.equals("")) {
-                "No comics with rating: $rating"
-            } else {
-                "${numberOfComicsByRating(rating)} comics with a rating of $rating: $listOfComics"
-            }
-        }
-    }
 
 
     fun archiveComic(indexToArchive: Int): Boolean {
@@ -98,14 +40,35 @@ class ComicAPI(serializerType: Serializer){
         }
         return false
     }
+
+
+    fun listAllComics(): String =
+        if (comics.isEmpty())  "No comics stored"
+        else formatListString(comics)
+
+    fun listActiveComics(): String =
+        if (numberOfActiveComics() == 0) "No active comics stored"
+        else formatListString(comics.filter{ comic -> !comic.isComicArchived })
+
+    fun listArchivedComics(): String =
+        if (numberOfArchivedComics() == 0) "No archived comics stored"
+        else formatListString(comics.filter{ comic -> comic.isComicArchived })
+
+    fun listComicsBySelectedRating(rating: Int): String =
+        if (comics.isEmpty()) "No comics stored"
+        else {
+            val listOfComics = formatListString(comics.filter{ comic -> comic.comicRating == rating})
+            if (listOfComics.equals("")) "No comics with rating: $rating"
+            else "${numberOfComicsByRating(rating)} comics with rating $rating: $listOfComics"
+        }
+
     fun listComicsBySelectedGenre(cat: String): String =
-        if (comics.isEmpty()) "No Comics Stored"
+        if (comics.isEmpty()) "No Comics are Stored"
         else {
             val listOfComics = formatListString(comics.filter{ comic -> comic.comicGenre == cat})
             if (listOfComics.equals("")) "No comics with genre: $cat"
             else "${numberOfComicsByGenre(cat)} comics with genre $cat: $listOfComics"
         }
-
 
     fun numberOfComics(): Int = comics.size
     fun numberOfActiveComics(): Int = comics.count{comic: Comic -> !comic.isComicArchived}
