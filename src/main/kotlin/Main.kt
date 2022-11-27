@@ -3,6 +3,7 @@ import controllers.ComicAPI
 import models.Book
 import models.Comic
 import mu.KotlinLogging
+import persistence.JSONSerializer
 import persistence.XMLSerializer
 import utils.ScannerInput
 import utils.ScannerInput.readNextInt
@@ -12,8 +13,10 @@ import java.lang.System.exit
 private val logger = KotlinLogging.logger {}
 
 
-private val bookAPI = BookAPI(XMLSerializer(File("books.xml")))
-private val comicAPI = ComicAPI(XMLSerializer(File("comics.xml")))
+//private val bookAPI = BookAPI(XMLSerializer(File("books.xml")))
+private val bookAPI = BookAPI(JSONSerializer(File("books.json")))
+//private val comicAPI = ComicAPI(XMLSerializer(File("comics.xml")))
+private val comicAPI = ComicAPI(JSONSerializer(File("comics.json")))
 
 fun main(args: Array<String>) {
     runMenu()
