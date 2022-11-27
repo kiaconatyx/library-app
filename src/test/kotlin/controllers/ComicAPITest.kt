@@ -373,6 +373,8 @@ class ComicAPITest {
             assertEquals(0, emptyComics!!.numberOfActiveComics())
         }
 
+
+
         @Test
         fun numberOfComicsByRatingCalculatedCorrectly() {
             assertEquals(1, populatedComics!!.numberOfComicsByRating(1))
@@ -382,6 +384,7 @@ class ComicAPITest {
             assertEquals(1, populatedComics!!.numberOfComicsByRating(5))
             assertEquals(0, emptyComics!!.numberOfComicsByRating(1))
         }
+
     }
 
 }
