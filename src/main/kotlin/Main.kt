@@ -86,8 +86,34 @@ fun addBook(){
     }
 }
 
-fun listBooks(){
+fun listBooks() {
+    if (bookAPI.numberOfBooks() > 0) {
+        val option = readNextInt(
+            """
+                  > --------------------------------
+                  > |   1) View ALL books          |
+                  > |   2) View ACTIVE books       |
+                  > |   3) View ARCHIVED books     |
+                  > --------------------------------
+         > ==>> """.trimMargin(">"))
+
+        when (option) {
+            1 -> listAllBooks();
+            2 -> listActiveBooks();
+            3 -> listArchivedBooks();
+            else -> println("Invalid option entered: " + option);
+        }
+    } else {
+        println("Option Invalid - No books stored");
+    }
+}
+
+fun listAllBooks() {
     println(bookAPI.listAllBooks())
+}
+
+fun listArchivedBooks() {
+    println(bookAPI.listArchivedBooks())
 }
 
 fun updateBook(){
@@ -141,10 +167,35 @@ fun addComic(){
     }
 }
 
-fun listComics(){
+fun listComics() {
+    if (comicAPI.numberOfComics() > 0) {
+        val option = readNextInt(
+            """
+                  > --------------------------------
+                  > |   1) View ALL comics          |
+                  > |   2) View ACTIVE comics       |
+                  > |   3) View ARCHIVED comics     |
+                  > --------------------------------
+         > ==>> """.trimMargin(">"))
+
+        when (option) {
+            1 -> listAllComics();
+            2 -> listActiveComics();
+            3 -> listArchivedComics();
+            else -> println("Invalid option entered: " + option);
+        }
+    } else {
+        println("Option Invalid - No comics stored");
+    }
+}
+
+fun listAllComics() {
     println(comicAPI.listAllComics())
 }
 
+fun listArchivedComics() {
+    println(comicAPI.listArchivedComics())
+}
 fun updateComic(){
     //logger.info { "updateComic() function invoked" }
     listComics()
