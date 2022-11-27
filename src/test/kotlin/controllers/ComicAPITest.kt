@@ -192,6 +192,29 @@ class ComicAPITest {
             assertEquals(storingComics.findComic(2), loadedComics.findComic(2))
         }
     }
+
+    @Nested
+    inner class ArchiveComics {
+        @Test
+        fun `archiving a comic that does not exist returns false`(){
+            assertFalse(populatedComics!!.archiveComic(6))
+            assertFalse(populatedComics!!.archiveComic(-1))
+            assertFalse(emptyComics!!.archiveComic(0))
+        }
+
+        @Test
+        fun `archiving an already archived comic returns false`(){
+            assertTrue(populatedComics!!.findComic(2)!!.isComicArchived)
+            assertFalse(populatedComics!!.archiveComic(2))
+        }
+
+        @Test
+        fun `archiving an active comic that exists returns true and archives`() {
+            assertFalse(populatedComics!!.findComic(1)!!.isComicArchived)
+            assertTrue(populatedComics!!.archiveComic(1))
+            assertTrue(populatedComics!!.findComic(1)!!.isComicArchived)
+        }
+    }
     @Nested
     inner class ListComics {
         @Test
