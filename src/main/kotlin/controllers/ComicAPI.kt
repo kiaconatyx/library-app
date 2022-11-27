@@ -97,7 +97,8 @@ class ComicAPI(serializerType: Serializer){
         //if the comic was not found, return false, indicating that the update was not successful
         return false
     }
-
+    fun searchByTitle(searchString : String) =
+        formatListString(comics.filter { comic -> comic.comicTitle.contains(searchString, ignoreCase = true)})
     fun isValidIndex(index: Int) :Boolean{
         return isValidListIndex(index, comics);
     }
@@ -111,4 +112,9 @@ class ComicAPI(serializerType: Serializer){
     fun store() {
         serializer.write(comics)
     }
+
+    private fun formatListString(comicsToFormat : List<Comic>) : String =
+        comicsToFormat
+            .joinToString (separator = "\n") { comic ->
+                comics.indexOf(comic).toString() + ": " + comic.toString() }
 }
