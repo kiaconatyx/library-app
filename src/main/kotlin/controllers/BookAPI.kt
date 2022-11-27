@@ -12,17 +12,10 @@ class BookAPI(serializerType: Serializer){
     fun add(book: Book): Boolean {
         return books.add(book)
     }
-    fun listAllBooks(): String {
-        return if (books.isEmpty()) {
-            "No books stored"
-        } else {
-            var listOfBooks = ""
-            for (i in books.indices) {
-                listOfBooks += "${i}: ${books[i]} \n"
-            }
-            listOfBooks
-        }
-    }
+
+    fun listAllBooks(): String =
+        if (books.isEmpty())  "No books stored"
+        else formatListString(books)
 
 
 
@@ -35,79 +28,34 @@ class BookAPI(serializerType: Serializer){
     fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
     }
+    fun listActiveBooks(): String =
+        if (numberOfActiveBooks() == 0) "No active books stored"
+        else formatListString(books.filter{ book -> !book.isBookArchived })
 
-    fun listActiveBooks(): String {
-        return if (numberOfActiveBooks() == 0) {
-            "No active books seem to be stored here"
-        } else {
-            var listOfActiveBooks = ""
-            for (book in books) {
-                if (!book.isBookArchived) {
-                    listOfActiveBooks += "${books.indexOf(book)}: $book \n"
-                }
-            }
-            listOfActiveBooks
+    fun listArchivedBooks(): String =
+        if (numberOfArchivedBooks() == 0) "No archived books stored"
+        else formatListString(books.filter{ book -> book.isBookArchived })
+
+
+
+
+
+    fun listBooksBySelectedRating(rating: Int): String =
+        if (books.isEmpty()) "No books stored"
+        else {
+            val listOfBooks = formatListString(books.filter{ book -> book.bookRating == rating})
+            if (listOfBooks.equals("")) "No books with rating: $rating"
+            else "${numberOfBooksByRating(rating)} books with rating $rating: $listOfBooks"
         }
-    }
 
-    fun listArchivedBooks(): String {
-        return if (numberOfArchivedBooks() == 0) {
-            "No archived books to see here"
-        } else {
-            var listOfArchivedBooks = ""
-            for (book in books) {
-                if (book.isBookArchived) {
-                    listOfArchivedBooks += "${books.indexOf(book)}: $book \n"
-                }
-            }
-            listOfArchivedBooks
+
+    fun listBooksBySelectedISBN(ISBN: Int): String =
+        if (books.isEmpty()) "No books stored"
+        else {
+            val listOfBooks = formatListString(books.filter{ book -> book.bookISBN == ISBN})
+            if (listOfBooks.equals("")) "No books with ISBN: $ISBN"
+            else "${numberOfBooksByISBN(ISBN)} books with ISBN $ISBN: $listOfBooks"
         }
-    }
-
-
-
-
-
-    fun listBooksBySelectedRating(rating: Int): String {
-        return if (books.isEmpty()) {
-            "No books stored"
-        } else {
-            var listOfBooks = ""
-            for (i in books.indices) {
-                if (books[i].bookRating == rating) {
-                    listOfBooks +=
-                        """$i: ${books[i]}
-                        """.trimIndent()
-                }
-            }
-            if (listOfBooks.equals("")) {
-                "No books with rating of: $rating"
-            } else {
-                "${numberOfBooksByRating(rating)} books with rating of $rating: $listOfBooks"
-            }
-        }
-    }
-
-
-    fun listBooksBySelectedISBN(ISBN: Int): String {
-        return if (books.isEmpty()) {
-            "No books stored"
-        } else {
-            var listOfBooks = ""
-            for (i in books.indices) {
-                if (books[i].bookISBN == ISBN) {
-                    listOfBooks +=
-                        """$i: ${books[i]}
-                        """.trimIndent()
-                }
-            }
-            if (listOfBooks.equals("")) {
-                "No books with ISBN of: $ISBN"
-            } else {
-                "${numberOfBooksByISBN(ISBN)} books with ISBN of $ISBN: $listOfBooks"
-            }
-        }
-    }
 
 
     fun archiveBook(indexToArchive: Int): Boolean {
