@@ -35,13 +35,15 @@ fun mainMenu() : Int {
          > |   3) Update a book             |
          > |   4) Delete a book             |
          > |   5) Archive a book            |
+         > |   6) Search book(description)  |
          > ----------------------------------
          > | Comic MENU                     |
-         > |   6) Add a Comic               |
-         > |   7) List all Comics           |
-         > |   8) Update a Comic            |
-         > |   9) Delete a Comic            |
-         > |   10) Archive a Comic          |
+         > |   7) Add a Comic               |
+         > |   8) List all Comics           |
+         > |   9) Update a Comic            |
+         > |   10) Delete a Comic           |
+         > |   11) Archive a Comic          |
+         > |   12) Search comic(description)|
          > ----------------------------------
          > ----------------------------------
          > |   20) Save                     |
@@ -60,14 +62,16 @@ fun runMenu() {
             3  -> updateBook()
             4  -> deleteBook()
             5 -> archiveBook()
+            6 -> searchBooks()
             //7 -> updateLibraryContentsInBook()
             //8 -> deleteAnLibrary()
             //9 -> markLibraryStatus()
-            6  -> addComic()
-            7  -> listComics()
-            8  -> updateComic()
-            9  -> deleteComic()
-            10 -> archiveComic()
+            7  -> addComic()
+            8  -> listComics()
+            9  -> updateComic()
+            10  -> deleteComic()
+            11 -> archiveComic()
+            12 -> searchComics()
             20 -> save()
             21 -> load()
             0  -> exitApp()
@@ -275,25 +279,6 @@ fun archiveComic() {
     }
 }
 
-fun searchBooks() {
-    val searchTitle = readNextLine("Enter the description to search by: ")
-    val searchResults = bookAPI.searchByTitle(searchTitle)
-    if (searchResults.isEmpty()) {
-        println("No books found")
-    } else {
-        println(searchResults)
-    }
-}
-
-fun searchComics() {
-    val searchTitle = readNextLine("Enter the description to search by: ")
-    val searchResults = comicAPI.searchByTitle(searchTitle)
-    if (searchResults.isEmpty()) {
-        println("No comics found")
-    } else {
-        println(searchResults)
-    }
-}
 
 
 fun searchBooks() {
