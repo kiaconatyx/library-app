@@ -5,7 +5,6 @@ import models.Comic
 import models.Library
 import mu.KotlinLogging
 import persistence.JSONSerializer
-import persistence.XMLSerializer
 import utils.ScannerInput
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
@@ -63,15 +62,16 @@ fun runMenu() {
             4  -> deleteBook()
             5 -> archiveBook()
             6 -> searchBooks()
-            //7 -> updateLibraryContentsInBook()
-            //8 -> deleteAnLibrary()
-            //9 -> markLibraryStatus()
-            7  -> addComic()
-            8  -> listComics()
-            9  -> updateComic()
-            10  -> deleteComic()
-            11 -> archiveComic()
-            12 -> searchComics()
+            7 -> addLibraryToBook()
+            8 -> updateLibraryContentsInBook()
+            9 -> deleteAnLibrary()
+            10 -> markLibraryStatus()
+            11  -> addComic()
+            12  -> listComics()
+            13  -> updateComic()
+            14  -> deleteComic()
+            15 -> archiveComic()
+            16 -> searchComics()
             20 -> save()
             21 -> load()
             0  -> exitApp()
@@ -309,6 +309,8 @@ fun save() {
     }
 }
 
+
+
 fun load() {
     try {
         bookAPI.load()
@@ -320,4 +322,96 @@ fun load() {
 fun exitApp(){
     println("Exiting...bye")
     exit(0)
+}
+
+//-------------------------------------------
+//ITEM MENU (only available for active books)
+//-------------------------------------------
+private fun addLibraryToBook() {
+    val book: Book? = askUserToChooseActiveBook()
+    if (book != null) {
+        if (book.addLibrary(Library(libraryContents = readNextLine("\t Library Contents: "))))
+            println("Add Successful!")
+        else println("Add NOT Successful")
+    }
+}
+
+fun updateLibraryContentsInBook() {
+    val book: Book? = askUserToChooseActiveBook()
+    if (book != null) {
+        val library: Library? = askUserToChooseLibrary(book)
+        if (library != null) {
+            val newContents = readNextLine("Enter new contents: ")
+            if (book.update(library.libraryId, Library(libraryContents = newContents))) {
+                println("Library contents updated")
+            } else {
+                println("Library contents NOT updated")
+            }
+        } else {
+            println("Invalid Library Id")
+        }
+    }
+}
+
+fun deleteAnLibrary() {
+    val book: Book? = askUserToChooseActiveBook()
+    if (book != null) {
+        val library: Library? = askUserToChooseLibrary(book)
+        if (library != null) {
+            val isDeleted = book.delete(library.libraryId)
+            if (isDeleted) {
+                println("Delete Successful!")
+            } else {
+                println("Delete NOT Successful")
+            }
+        }
+    }
+}
+
+fun markLibraryStatus() {
+    val book: Book? = askUserToChooseActiveBook()
+    if (book != null) {
+        val library: Library? = askUserToChooseLibrary(book)
+        if (library != null) {
+            var changeStatus = 'X'
+            if (library.isLibraryComplete) {
+                changeStatus =
+                    ScannerInput.readNextChar("The library is currently complete...do you want to mark it as TODO?")
+                if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
+                    library.isLibraryComplete = false
+            }
+            else {
+                changeStatus =
+                    ScannerInput.readNextChar("The library is currently TODO...do you want to mark it as Complete?")
+                if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
+                    library.isLibraryComplete = true
+            }
+        }
+    }
+}
+private fun askUserToChooseActiveBook(): Book? {
+    listActiveBooks()
+    if (bookAPI.numberOfActiveBooks() > 0) {
+        val book = bookAPI.findBook(readNextInt("\nEnter the id of the book: "))
+        if (book != null) {
+            if (book.isBookArchived) {
+                println("Book is NOT Active, it is Archived")
+            } else {
+                return book //chosen book is active
+            }
+        } else {
+            println("Book id is not valid")
+        }
+    }
+    return null //selected book is not active
+}
+
+private fun askUserToChooseLibrary(book: Book): Library? {
+    if (book.numberOfLibraries() > 0) {
+        print(book.listLibraries())
+        return book.findOne(readNextInt("\nEnter the id of the library: "))
+    } else {
+        println("No libraries for chosen book")
+        return null
+    }
 }

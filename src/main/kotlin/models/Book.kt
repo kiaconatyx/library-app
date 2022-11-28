@@ -25,7 +25,7 @@ data class Book(var bookTitle: String,
         return books.removeIf { book -> book.bookId == id}
     }
 
-    fun update(id: Int, newBook : Book): Boolean {
+    fun update(id: Int, newBook: Library): Boolean {
         val foundBook = findOne(id)
 
         //if the object exists, use the details passed in the newBook parameter to
