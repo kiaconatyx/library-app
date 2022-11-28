@@ -1,5 +1,7 @@
 package models
 
+import Utils.Utilities
+
 data class Book(var bookTitle: String,
                 var bookRating: Int,
                 var bookISBN: Int,
@@ -22,17 +24,17 @@ data class Book(var bookTitle: String,
     }
 
     fun delete(id: Int): Boolean {
-        return books.removeIf { book -> book.bookId == id}
+        return libraries.removeIf { library -> library.libraryId == id}
     }
 
     fun update(id: Int, newBook: Library): Boolean {
-        val foundBook = findOne(id)
+        val foundLibrary = findOne(id)
 
         //if the object exists, use the details passed in the newBook parameter to
         //update the found object in the Set
-        if (foundBook != null){
-            foundBook.bookContents = newBook.bookContents
-            foundBook.isBookComplete = newBook.isBookComplete
+        if (foundLibrary != null){
+            foundLibrary.libraryContents = newLibrary.libraryContents
+            foundLibrary.isLibraryComplete = newLibrary.isLibraryComplete
             return true
         }
 

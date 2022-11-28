@@ -66,14 +66,16 @@ fun runMenu() {
             8 -> updateLibraryContentsInBook()
             9 -> deleteAnLibrary()
             10 -> markLibraryStatus()
-            11  -> addComic()
-            12  -> listComics()
-            13  -> updateComic()
-            14  -> deleteComic()
-            15 -> archiveComic()
-            16 -> searchComics()
-            20 -> save()
-            21 -> load()
+            15 -> searchLibraries()
+            16 -> listToDoLibraries()
+            17  -> addComic()
+            18  -> listComics()
+            19  -> updateComic()
+            20  -> deleteComic()
+            21 -> archiveComic()
+            22 -> searchComics()
+            23 -> save()
+            24 -> load()
             0  -> exitApp()
             else -> println("Invalid option entered: ${option}")
         }
@@ -388,6 +390,23 @@ fun markLibraryStatus() {
             }
         }
     }
+}
+
+fun searchLibraries() {
+    val searchContents = readNextLine("Enter the library contents to search by: ")
+    val searchResults = bookAPI.searchLibraryByContents(searchContents)
+    if (searchResults.isEmpty()) {
+        println("No libraries found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun listToDoLibraries(){
+    if (bookAPI.numberOfToDoLibraries() > 0) {
+        println("Total TODO Libraries: ${bookAPI.numberOfToDoLibraries()}")
+    }
+    println(bookAPI.listTodoLibraries())
 }
 private fun askUserToChooseActiveBook(): Book? {
     listActiveBooks()
