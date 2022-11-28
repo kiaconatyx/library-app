@@ -2,6 +2,7 @@ import controllers.BookAPI
 import controllers.ComicAPI
 import models.Book
 import models.Comic
+import models.Library
 import mu.KotlinLogging
 import persistence.JSONSerializer
 import persistence.XMLSerializer
@@ -59,6 +60,9 @@ fun runMenu() {
             3  -> updateBook()
             4  -> deleteBook()
             5 -> archiveBook()
+            //7 -> updateLibraryContentsInBook()
+            //8 -> deleteAnLibrary()
+            //9 -> markLibraryStatus()
             6  -> addComic()
             7  -> listComics()
             8  -> updateComic()
