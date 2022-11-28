@@ -2,7 +2,8 @@ package models
 
 import Utils.Utilities
 
-data class Book(var bookTitle: String,
+data class Book(var bookId: Int = 0,
+                var bookTitle: String,
                 var bookRating: Int,
                 var bookISBN: Int,
                 var bookGenre: String,
@@ -27,7 +28,7 @@ data class Book(var bookTitle: String,
         return libraries.removeIf { library -> library.libraryId == id}
     }
 
-    fun update(id: Int, newBook: Library): Boolean {
+    fun update(id: Int, newLibrary: Library): Boolean {
         val foundLibrary = findOne(id)
 
         //if the object exists, use the details passed in the newBook parameter to

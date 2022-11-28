@@ -25,29 +25,34 @@ fun main(args: Array<String>) {
 
 fun mainMenu() : Int {
     return ScannerInput.readNextInt(""" 
-         > ----------------------------------
-         > |       LIBRARY APP              |
-         > ----------------------------------
-         > | BOOK MENU                      |
-         > |   1) Add a book                |
-         > |   2) List all books            |
-         > |   3) Update a book             |
-         > |   4) Delete a book             |
-         > |   5) Archive a book            |
-         > |   6) Search book(description)  |
-         > ----------------------------------
-         > | Comic MENU                     |
-         > |   7) Add a Comic               |
-         > |   8) List all Comics           |
-         > |   9) Update a Comic            |
-         > |   10) Delete a Comic           |
-         > |   11) Archive a Comic          |
-         > |   12) Search comic(description)|
-         > ----------------------------------
-         > ----------------------------------
-         > |   20) Save                     |
-         > |   21) Load                     |
-         > |   0) Exit                      |
+         > -------------------------------------------
+         > |       LIBRARY APP                       |
+         > -------------------------------------------
+         > | BOOK MENU                               |
+         > |   1) Add a book                         |
+         > |   2) List all books                     |
+         > |   3) Update a book                      |
+         > |   4) Delete a book                      |
+         > |   5) Archive a book                     |
+         > |   6) Search book(description)           |
+         > -------------------------------------------
+         > | LIBRARY MENU                            | 
+         > |   6) Add library to a book              |
+         > |   7) Update library contents on a book  |
+         > |   8) Delete library from a book         |
+         > |   9) Mark library as complete/todo      | 
+         > -------------------------------------------
+         > |   10) Add a Comic                       |
+         > |   11) List all Comics                   |
+         > |   12) Update a Comic                    |
+         > |   13) Delete a Comic                    |
+         > |   14) Archive a Comic                   |
+         > |   15) Search comic(description)         |
+         > -------------------------------------------
+         > -------------------------------------------
+         > |   20) Save                              |
+         > |   21) Load                              |
+         > |   0) Exit                               |
          > ----------------------------------
         > ==>> """.trimMargin(">"))
 }
