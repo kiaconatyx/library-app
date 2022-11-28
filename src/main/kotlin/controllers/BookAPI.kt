@@ -1,6 +1,7 @@
 package controllers
 import persistence.XMLSerializer
 import models.Book
+import models.Library
 import persistence.Serializer
 
 
@@ -8,10 +9,14 @@ class BookAPI(serializerType: Serializer){
 
     private var serializer: Serializer = serializerType
     private var books = ArrayList<Book>()
+    private var lastId = 0
+    private fun getId() = lastId++
 
     fun add(book: Book): Boolean {
+        book.bookId = getId()
         return books.add(book)
     }
+
 
     fun listAllBooks(): String =
         if (books.isEmpty())  "No books stored"
@@ -19,11 +24,7 @@ class BookAPI(serializerType: Serializer){
 
 
 
-    fun findBook(index: Int): Book? {
-        return if (isValidListIndex(index, books)) {
-            books[index]
-        } else null
-    }
+    fun findBook(bookId : Int) =  books.find{ book -> book.bookId == bookId }
 
     fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
@@ -109,7 +110,53 @@ class BookAPI(serializerType: Serializer){
         return false
     }
 
+    fun searchLibraryByContents(searchString: String): String {
+        return if (numberOfBooks() == 0) "No books stored"
+        else {
+            var listOfBooks = ""
+            for (book in books) {
+                for (library in book.libraries) {
+                    if (library.libraryContents.contains(searchString, ignoreCase = true)) {
+                        listOfBooks += "${book.bookId}: ${book.bookTitle} \n\t${library}\n"
+                    }
+                }
+            }
+            if (listOfBooks == "") "No libraries found for: $searchString"
+            else listOfBooks
+        }
+    }
 
+    // ----------------------------------------------
+    //  LISTING METHODS FOR ITEMS
+    // ----------------------------------------------
+    fun listTodoLibraries(): String =
+        if (numberOfBooks() == 0) "No books stored"
+        else {
+            var listOfTodoLibraries = ""
+            for (book in books) {
+                for (library in book.libraries) {
+                    if (!library.isLibraryComplete) {
+                        listOfTodoLibraries += book.bookTitle + ": " + library.libraryContents + "\n"
+                    }
+                }
+            }
+            listOfTodoLibraries
+        }
+
+    // ----------------------------------------------
+    //  COUNTING METHODS FOR ITEMS
+    // ----------------------------------------------
+    fun numberOfToDoLibraries(): Int {
+        var numberOfToDoLibraries = 0
+        for (book in books) {
+            for (library in book.libraries) {
+                if (!library.isLibraryComplete) {
+                    numberOfToDoLibraries++
+                }
+            }
+        }
+        return numberOfToDoLibraries
+    }
 
 
     fun isValidIndex(index: Int) :Boolean{

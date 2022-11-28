@@ -5,7 +5,6 @@ import models.Comic
 import models.Library
 import mu.KotlinLogging
 import persistence.JSONSerializer
-import persistence.XMLSerializer
 import utils.ScannerInput
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
@@ -26,29 +25,34 @@ fun main(args: Array<String>) {
 
 fun mainMenu() : Int {
     return ScannerInput.readNextInt(""" 
-         > ----------------------------------
-         > |       LIBRARY APP              |
-         > ----------------------------------
-         > | BOOK MENU                      |
-         > |   1) Add a book                |
-         > |   2) List all books            |
-         > |   3) Update a book             |
-         > |   4) Delete a book             |
-         > |   5) Archive a book            |
-         > |   6) Search book(description)  |
-         > ----------------------------------
-         > | Comic MENU                     |
-         > |   7) Add a Comic               |
-         > |   8) List all Comics           |
-         > |   9) Update a Comic            |
-         > |   10) Delete a Comic           |
-         > |   11) Archive a Comic          |
-         > |   12) Search comic(description)|
-         > ----------------------------------
-         > ----------------------------------
-         > |   20) Save                     |
-         > |   21) Load                     |
-         > |   0) Exit                      |
+         > -------------------------------------------
+         > |       LIBRARY APP                       |
+         > -------------------------------------------
+         > | BOOK MENU                               |
+         > |   1) Add a book                         |
+         > |   2) List all books                     |
+         > |   3) Update a book                      |
+         > |   4) Delete a book                      |
+         > |   5) Archive a book                     |
+         > |   6) Search book(description)           |
+         > -------------------------------------------
+         > | LIBRARY MENU                            | 
+         > |   6) Add library to a book              |
+         > |   7) Update library contents on a book  |
+         > |   8) Delete library from a book         |
+         > |   9) Mark library as complete/todo      | 
+         > -------------------------------------------
+         > |   10) Add a Comic                       |
+         > |   11) List all Comics                   |
+         > |   12) Update a Comic                    |
+         > |   13) Delete a Comic                    |
+         > |   14) Archive a Comic                   |
+         > |   15) Search comic(description)         |
+         > -------------------------------------------
+         > -------------------------------------------
+         > |   20) Save                              |
+         > |   21) Load                              |
+         > |   0) Exit                               |
          > ----------------------------------
         > ==>> """.trimMargin(">"))
 }
@@ -63,17 +67,20 @@ fun runMenu() {
             4  -> deleteBook()
             5 -> archiveBook()
             6 -> searchBooks()
-            //7 -> updateLibraryContentsInBook()
-            //8 -> deleteAnLibrary()
-            //9 -> markLibraryStatus()
-            7  -> addComic()
-            8  -> listComics()
-            9  -> updateComic()
-            10  -> deleteComic()
-            11 -> archiveComic()
-            12 -> searchComics()
-            20 -> save()
-            21 -> load()
+            7 -> addLibraryToBook()
+            8 -> updateLibraryContentsInBook()
+            9 -> deleteAnLibrary()
+            10 -> markLibraryStatus()
+            15 -> searchLibraries()
+            16 -> listToDoLibraries()
+            17  -> addComic()
+            18  -> listComics()
+            19  -> updateComic()
+            20  -> deleteComic()
+            21 -> archiveComic()
+            22 -> searchComics()
+            23 -> save()
+            24 -> load()
             0  -> exitApp()
             else -> println("Invalid option entered: ${option}")
         }
@@ -309,6 +316,8 @@ fun save() {
     }
 }
 
+
+
 fun load() {
     try {
         bookAPI.load()
@@ -320,4 +329,113 @@ fun load() {
 fun exitApp(){
     println("Exiting...bye")
     exit(0)
+}
+
+//-------------------------------------------
+//ITEM MENU (only available for active books)
+//-------------------------------------------
+private fun addLibraryToBook() {
+    val book: Book? = askUserToChooseActiveBook()
+    if (book != null) {
+        if (book.addLibrary(Library(libraryContents = readNextLine("\t Library Contents: "))))
+            println("Add Successful!")
+        else println("Add NOT Successful")
+    }
+}
+
+fun updateLibraryContentsInBook() {
+    val book: Book? = askUserToChooseActiveBook()
+    if (book != null) {
+        val library: Library? = askUserToChooseLibrary(book)
+        if (library != null) {
+            val newContents = readNextLine("Enter new contents: ")
+            if (book.update(library.libraryId, Library(libraryContents = newContents))) {
+                println("Library contents updated")
+            } else {
+                println("Library contents NOT updated")
+            }
+        } else {
+            println("Invalid Library Id")
+        }
+    }
+}
+
+fun deleteAnLibrary() {
+    val book: Book? = askUserToChooseActiveBook()
+    if (book != null) {
+        val library: Library? = askUserToChooseLibrary(book)
+        if (library != null) {
+            val isDeleted = book.delete(library.libraryId)
+            if (isDeleted) {
+                println("Delete Successful!")
+            } else {
+                println("Delete NOT Successful")
+            }
+        }
+    }
+}
+
+fun markLibraryStatus() {
+    val book: Book? = askUserToChooseActiveBook()
+    if (book != null) {
+        val library: Library? = askUserToChooseLibrary(book)
+        if (library != null) {
+            var changeStatus = 'X'
+            if (library.isLibraryComplete) {
+                changeStatus =
+                    ScannerInput.readNextChar("The library is currently complete...do you want to mark it as TODO?")
+                if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
+                    library.isLibraryComplete = false
+            }
+            else {
+                changeStatus =
+                    ScannerInput.readNextChar("The library is currently TODO...do you want to mark it as Complete?")
+                if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
+                    library.isLibraryComplete = true
+            }
+        }
+    }
+}
+
+fun searchLibraries() {
+    val searchContents = readNextLine("Enter the library contents to search by: ")
+    val searchResults = bookAPI.searchLibraryByContents(searchContents)
+    if (searchResults.isEmpty()) {
+        println("No libraries found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun listToDoLibraries(){
+    if (bookAPI.numberOfToDoLibraries() > 0) {
+        println("Total TODO Libraries: ${bookAPI.numberOfToDoLibraries()}")
+    }
+    println(bookAPI.listTodoLibraries())
+}
+private fun askUserToChooseActiveBook(): Book? {
+    listActiveBooks()
+    if (bookAPI.numberOfActiveBooks() > 0) {
+        val book = bookAPI.findBook(readNextInt("\nEnter the id of the book: "))
+        if (book != null) {
+            if (book.isBookArchived) {
+                println("Book is NOT Active, it is Archived")
+            } else {
+                return book //chosen book is active
+            }
+        } else {
+            println("Book id is not valid")
+        }
+    }
+    return null //selected book is not active
+}
+
+private fun askUserToChooseLibrary(book: Book): Library? {
+    if (book.numberOfLibraries() > 0) {
+        print(book.listLibraries())
+        return book.findOne(readNextInt("\nEnter the id of the library: "))
+    } else {
+        println("No libraries for chosen book")
+        return null
+    }
 }

@@ -6,7 +6,7 @@ Keep track of multiple books. Menu-driven console app.
 
 Features:
 
-1.Menu Items for Adding
+1.Menu Books for Adding
 
 2.Listing
 
