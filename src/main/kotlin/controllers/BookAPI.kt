@@ -8,10 +8,14 @@ class BookAPI(serializerType: Serializer){
 
     private var serializer: Serializer = serializerType
     private var books = ArrayList<Book>()
+    private var lastId = 0
+    private fun getId() = lastId++
 
     fun add(book: Book): Boolean {
+        book.bookId = getId()
         return books.add(book)
     }
+
 
     fun listAllBooks(): String =
         if (books.isEmpty())  "No books stored"
@@ -19,11 +23,7 @@ class BookAPI(serializerType: Serializer){
 
 
 
-    fun findBook(index: Int): Book? {
-        return if (isValidListIndex(index, books)) {
-            books[index]
-        } else null
-    }
+    fun findBook(bookId : Int) =  books.find{ book -> book.bookId == bookId }
 
     fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
