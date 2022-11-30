@@ -8,24 +8,24 @@ data class Book(var bookId: Int = 0,
                 var bookISBN: Int,
                 var bookGenre: String,
                 var isBookArchived :Boolean = false,
-                var libraries : MutableSet<Author> = mutableSetOf()) {
+                var authors : MutableSet<Author> = mutableSetOf()) {
 
     private var lastAuthorId = 0
     private fun getAuthorId() = lastAuthorId++
 
     fun addAuthor(author: Author) : Boolean {
         author.authorId = getAuthorId()
-        return libraries.add(author)
+        return authors.add(author)
 
     }
-    fun numberOfLibraries() = libraries.size
+    fun numberOfAuthors() = authors.size
 
     fun findOne(id: Int): Author?{
-        return libraries.find{ author -> author.authorId == id }
+        return authors.find{ author -> author.authorId == id }
     }
 
     fun delete(id: Int): Boolean {
-        return libraries.removeIf { author -> author.authorId == id}
+        return authors.removeIf { author -> author.authorId == id}
     }
 
     fun update(id: Int, newAuthor: Author): Boolean {
@@ -43,23 +43,23 @@ data class Book(var bookId: Int = 0,
         return false
     }
 
-    fun listLibraries() =
-        if (libraries.isEmpty())  "\tNO BOOKS ADDED"
-        else  Utilities.formatSetString(libraries)
+    fun listAuthors() =
+        if (authors.isEmpty())  "\tNO BOOKS ADDED"
+        else  Utilities.formatSetString(authors)
 
     override fun toString(): String {
         val archived = if (isBookArchived) 'Y' else 'N'
-        return "$bookId: $bookTitle, Rating($bookRating),ISBN($bookISBN), Genre($bookGenre), Archived($archived) \n${listLibraries()}"
+        return "$bookId: $bookTitle, Rating($bookRating),ISBN($bookISBN), Genre($bookGenre), Archived($archived) \n${listAuthors()}"
     }
 
     fun checkBookCompletionStatus(): Boolean {
-        if (libraries.isNotEmpty()) {
-            for (author in libraries) {
+        if (authors.isNotEmpty()) {
+            for (author in authors) {
                 if (!author.isAuthorComplete) {
                     return false
                 }
             }
         }
-        return true //a book with empty libraries can be archived, or all libraries are complete
+        return true //a book with empty authors can be archived, or all authors are complete
     }
 }

@@ -115,47 +115,47 @@ class BookAPI(serializerType: Serializer){
         else {
             var listOfBooks = ""
             for (book in books) {
-                for (author in book.libraries) {
+                for (author in book.authors) {
                     if (author.authorContents.contains(searchString, ignoreCase = true)) {
                         listOfBooks += "${book.bookId}: ${book.bookTitle} \n\t${author}\n"
                     }
                 }
             }
-            if (listOfBooks == "") "No libraries found for: $searchString"
+            if (listOfBooks == "") "No authors found for: $searchString"
             else listOfBooks
         }
     }
 
     // ----------------------------------------------
-    //  LISTING METHODS FOR ITEMS
+    //  LISTING METHODS FOR AUTHORS
     // ----------------------------------------------
-    fun listTodoLibraries(): String =
+    fun listTodoAuthors(): String =
         if (numberOfBooks() == 0) "No books stored"
         else {
-            var listOfTodoLibraries = ""
+            var listOfTodoAuthors = ""
             for (book in books) {
-                for (author in book.libraries) {
+                for (author in book.authors) {
                     if (!author.isAuthorComplete) {
-                        listOfTodoLibraries += book.bookTitle + ": " + author.authorContents + "\n"
+                        listOfTodoAuthors += book.bookTitle + ": " + author.authorContents + "\n"
                     }
                 }
             }
-            listOfTodoLibraries
+            listOfTodoAuthors
         }
 
     // ----------------------------------------------
-    //  COUNTING METHODS FOR ITEMS
+    //  COUNTING METHODS FOR AUTHORS
     // ----------------------------------------------
-    fun numberOfToDoLibraries(): Int {
-        var numberOfToDoLibraries = 0
+    fun numberOfToDoAuthors(): Int {
+        var numberOfToDoAuthors = 0
         for (book in books) {
-            for (author in book.libraries) {
+            for (author in book.authors) {
                 if (!author.isAuthorComplete) {
-                    numberOfToDoLibraries++
+                    numberOfToDoAuthors++
                 }
             }
         }
-        return numberOfToDoLibraries
+        return numberOfToDoAuthors
     }
 
 

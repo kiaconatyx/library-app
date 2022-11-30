@@ -71,8 +71,8 @@ fun runMenu() {
             8 -> updateAuthorContentsInBook()
             9 -> deleteAnAuthor()
             10 -> markAuthorStatus()
-            15 -> searchLibraries()
-            16 -> listToDoLibraries()
+            15 -> searchAuthors()
+            16 -> listToDoAuthors()
             17  -> addComic()
             18  -> listComics()
             19  -> updateComic()
@@ -88,11 +88,12 @@ fun runMenu() {
 }
 
 fun addBook(){
+    val bookId = readNextInt("Enter an ID for the book")
     val bookTitle = readNextLine("Enter the book's title: ")
     val bookRating = readNextInt("Enter a rating for the book (1-low, 2, 3, 4, 5-high): ")
     val bookISBN = readNextInt("Enter a unique ISBN for the book ")
     val bookGenre = readNextLine("Enter a suitable genre for the book ")
-    val isAdded = bookAPI.add(Book(bookTitle, bookRating, bookISBN,bookGenre, false))
+    val isAdded = bookAPI.add(Book(bookId,bookTitle, bookRating, bookISBN,bookGenre, false))
 
     if (isAdded) {
         println("Added Successfully")
@@ -139,13 +140,14 @@ fun updateBook(){
         //only ask the user to choose the book if books exist
         val indexToUpdate = readNextInt("Enter the index of the book to update: ")
         if (bookAPI.isValidIndex(indexToUpdate)) {
+            val bookId = readNextInt("Enter an ID for the book")
             val bookTitle = readNextLine("Enter a title for the book: ")
             val bookRating = readNextInt("Enter a rating (1-low, 2, 3, 4, 5-high): ")
             val bookISBN = readNextInt("Enter a Unique ISBN for the book ")
             val bookGenre = readNextLine("Enter a genre for the book: ")
 
             //pass the index of the book and the new book details to BookAPI for updating and check for success.
-            if (bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookRating, bookISBN,bookGenre, false))){
+            if (bookAPI.updateBook(indexToUpdate, Book(bookId,bookTitle, bookRating, bookISBN,bookGenre, false))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
@@ -397,21 +399,21 @@ fun markAuthorStatus() {
     }
 }
 
-fun searchLibraries() {
+fun searchAuthors() {
     val searchContents = readNextLine("Enter the author contents to search by: ")
     val searchResults = bookAPI.searchAuthorByContents(searchContents)
     if (searchResults.isEmpty()) {
-        println("No libraries found")
+        println("No authors found")
     } else {
         println(searchResults)
     }
 }
 
-fun listToDoLibraries(){
-    if (bookAPI.numberOfToDoLibraries() > 0) {
-        println("Total TODO Libraries: ${bookAPI.numberOfToDoLibraries()}")
+fun listToDoAuthors(){
+    if (bookAPI.numberOfToDoAuthors() > 0) {
+        println("Total TODO Authors: ${bookAPI.numberOfToDoAuthors()}")
     }
-    println(bookAPI.listTodoLibraries())
+    println(bookAPI.listTodoAuthors())
 }
 private fun askUserToChooseActiveBook(): Book? {
     listActiveBooks()

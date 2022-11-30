@@ -14,8 +14,8 @@ object Utilities {
             .joinToString(separator = "\n") { book ->  "$book" }
 
     @JvmStatic
-    fun formatSetString(librariesToFormat: Set<Author>): String =
-        librariesToFormat
+    fun formatSetString(authorsToFormat: Set<Author>): String =
+        authorsToFormat
             .joinToString(separator = "\n") { book ->  "\t$book" }
 
 }

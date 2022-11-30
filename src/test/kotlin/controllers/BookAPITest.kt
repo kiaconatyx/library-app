@@ -23,11 +23,11 @@ class BookAPITest {
 
     @BeforeEach
     fun setup() {
-        music101 = Book("Music 101", 2, 100, "music", false)
-        finalfantasy = Book("Final Fantasy - The World Beyond", 1, 101, "fantasy", false)
-        learntocode = Book("Learn to Code", 4, 102, "Tech", false)
-        cookingfordummies = Book("Cooking for Dummies", 5, 103, "cooking", false)
-        dolphinworld = Book("Dolphin World", 3, 104, "Animals & Nature", false)
+        music101 = Book(101,"Music 101", 2, 100, "music", false)
+        finalfantasy = Book(102,"Final Fantasy - The World Beyond", 1, 101, "fantasy", false)
+        learntocode = Book(103,"Learn to Code", 4, 102, "Tech", false)
+        cookingfordummies = Book(104,"Cooking for Dummies", 5, 103, "cooking", false)
+        dolphinworld = Book(105,"Dolphin World", 3, 104, "Animals & Nature", false)
 
         populatedBooks!!.add(music101!!)
         populatedBooks!!.add(finalfantasy!!)
@@ -51,7 +51,7 @@ class BookAPITest {
     inner class AddBooks {
         @Test
         fun `adding a Book to a populated list adds to ArrayList`() {
-            val newBook = Book("Buddy Holly Life Story", 5, 107, "bio", false)
+            val newBook = Book(105,"Buddy Holly Life Story", 5, 107, "bio", false)
             assertEquals(5, populatedBooks!!.numberOfBooks())
             assertTrue(populatedBooks!!.add(newBook))
             assertEquals(6, populatedBooks!!.numberOfBooks())
@@ -60,7 +60,7 @@ class BookAPITest {
 
         @Test
         fun `adding a Book to an empty list adds to ArrayList`() {
-            val newBook = Book("Buddy Holly Life Story", 5, 107, "bio", false)
+            val newBook = Book(105,"Buddy Holly Life Story", 5, 107, "bio", false)
             assertEquals(0, emptyBooks!!.numberOfBooks())
             assertTrue(emptyBooks!!.add(newBook))
             assertEquals(1, emptyBooks!!.numberOfBooks())
@@ -92,9 +92,9 @@ class BookAPITest {
     inner class UpdateBooks {
         @Test
         fun `updating a book that does not exist returns false`(){
-            assertFalse(populatedBooks!!.updateBook(6, Book("Updating Book", 2, 113, "Fiction", false)))
-            assertFalse(populatedBooks!!.updateBook(-1, Book("Updating Book", 2, 114, "True Crime", false)))
-            assertFalse(emptyBooks!!.updateBook(0, Book("Updating Book", 2, 112,"Music",  false)))
+            assertFalse(populatedBooks!!.updateBook(6, Book(108,"Updating Book", 2, 113, "Fiction", false)))
+            assertFalse(populatedBooks!!.updateBook(-1, Book(108,"Updating Book", 2, 114, "True Crime", false)))
+            assertFalse(emptyBooks!!.updateBook(0, Book(108,"Updating Book", 2, 112,"Music",  false)))
         }
 
         @Test
@@ -106,7 +106,7 @@ class BookAPITest {
             assertEquals("Nature", populatedBooks!!.findBook(4)!!.bookGenre)
 
             //update book 5 with new information and ensure contents updated successfully
-            assertTrue(populatedBooks!!.updateBook(4, Book("Updating Book", 2, 102, "Nature", false)))
+            assertTrue(populatedBooks!!.updateBook(4, Book(106,"Updating Book", 2, 102, "Nature", false)))
             assertEquals("Updating Book", populatedBooks!!.findBook(4)!!.bookTitle)
             assertEquals(2, populatedBooks!!.findBook(4)!!.bookRating)
             assertEquals("Animals", populatedBooks!!.findBook(4)!!.bookGenre)
