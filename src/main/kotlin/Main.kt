@@ -36,18 +36,20 @@ fun mainMenu() : Int {
          > |   5) Archive a book                     |
          > |   6) Search book(description)           |
          > -------------------------------------------
-         > | LIBRARY MENU                            | 
-         > |   6) Add author to a book              |
-         > |   7) Update author contents on a book  |
-         > |   8) Delete author from a book         |
-         > |   9) Mark author as complete/todo      | 
+         > | AUTHOR  MENU                            | 
+         > |   7) Add author to a book               |
+         > |   8) Update author name on a book       |
+         > |   9) Delete author from a book          |
+         > |   10) Mark author as active/inactive     | 
+         > |   11) Search for all authors            |
+         > |   12) List active authors               |
          > -------------------------------------------
-         > |   10) Add a Comic                       |
-         > |   11) List all Comics                   |
-         > |   12) Update a Comic                    |
-         > |   13) Delete a Comic                    |
-         > |   14) Archive a Comic                   |
-         > |   15) Search comic(description)         |
+         > |   13) Add a Comic                       |
+         > |   14) List all Comics                   |
+         > |   15) Update a Comic                    |
+         > |   16) Delete a Comic                    |
+         > |   17) Archive a Comic                   |
+         > |   18) Search comic(description)         |
          > -------------------------------------------
          > -------------------------------------------
          > |   20) Save                              |
@@ -71,16 +73,16 @@ fun runMenu() {
             8 -> updateAuthorNamesInBook()
             9 -> deleteAnAuthor()
             10 -> markAuthorStatus()
-            15 -> searchAuthors()
-            16 -> listToDoAuthors()
-            17  -> addComic()
-            18  -> listComics()
-            19  -> updateComic()
-            20  -> deleteComic()
-            21 -> archiveComic()
-            22 -> searchComics()
-            23 -> save()
-            24 -> load()
+            11 -> searchAuthors()
+            12 -> listToDoAuthors()
+            13  -> addComic()
+            14  -> listComics()
+            15  -> updateComic()
+            16  -> deleteComic()
+            17 -> archiveComic()
+            18 -> searchComics()
+            20 -> save()
+            21 -> load()
             0  -> exitApp()
             else -> println("Invalid option entered: ${option}")
         }
@@ -334,7 +336,7 @@ fun exitApp(){
 }
 
 //-------------------------------------------
-//ITEM MENU (only available for active books)
+//AUTHOR MENU (only available for active books)
 //-------------------------------------------
 private fun addAuthorToBook() {
     val book: Book? = askUserToChooseActiveBook()
