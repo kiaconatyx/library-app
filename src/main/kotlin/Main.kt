@@ -2,7 +2,7 @@ import controllers.BookAPI
 import controllers.ComicAPI
 import models.Book
 import models.Comic
-import models.Library
+import models.Author
 import mu.KotlinLogging
 import persistence.JSONSerializer
 import utils.ScannerInput
@@ -37,10 +37,10 @@ fun mainMenu() : Int {
          > |   6) Search book(description)           |
          > -------------------------------------------
          > | LIBRARY MENU                            | 
-         > |   6) Add library to a book              |
-         > |   7) Update library contents on a book  |
-         > |   8) Delete library from a book         |
-         > |   9) Mark library as complete/todo      | 
+         > |   6) Add author to a book              |
+         > |   7) Update author contents on a book  |
+         > |   8) Delete author from a book         |
+         > |   9) Mark author as complete/todo      | 
          > -------------------------------------------
          > |   10) Add a Comic                       |
          > |   11) List all Comics                   |
@@ -67,10 +67,10 @@ fun runMenu() {
             4  -> deleteBook()
             5 -> archiveBook()
             6 -> searchBooks()
-            7 -> addLibraryToBook()
-            8 -> updateLibraryContentsInBook()
-            9 -> deleteAnLibrary()
-            10 -> markLibraryStatus()
+            7 -> addAuthorToBook()
+            8 -> updateAuthorContentsInBook()
+            9 -> deleteAnAuthor()
+            10 -> markAuthorStatus()
             15 -> searchLibraries()
             16 -> listToDoLibraries()
             17  -> addComic()
@@ -334,38 +334,38 @@ fun exitApp(){
 //-------------------------------------------
 //ITEM MENU (only available for active books)
 //-------------------------------------------
-private fun addLibraryToBook() {
+private fun addAuthorToBook() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        if (book.addLibrary(Library(libraryContents = readNextLine("\t Library Contents: "))))
+        if (book.addAuthor(Author(authorContents = readNextLine("\t Author Contents: "))))
             println("Add Successful!")
         else println("Add NOT Successful")
     }
 }
 
-fun updateLibraryContentsInBook() {
+fun updateAuthorContentsInBook() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        val library: Library? = askUserToChooseLibrary(book)
-        if (library != null) {
+        val author: Author? = askUserToChooseAuthor(book)
+        if (author != null) {
             val newContents = readNextLine("Enter new contents: ")
-            if (book.update(library.libraryId, Library(libraryContents = newContents))) {
-                println("Library contents updated")
+            if (book.update(author.authorId, Author(authorContents = newContents))) {
+                println("Author contents updated")
             } else {
-                println("Library contents NOT updated")
+                println("Author contents NOT updated")
             }
         } else {
-            println("Invalid Library Id")
+            println("Invalid Author Id")
         }
     }
 }
 
-fun deleteAnLibrary() {
+fun deleteAnAuthor() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        val library: Library? = askUserToChooseLibrary(book)
-        if (library != null) {
-            val isDeleted = book.delete(library.libraryId)
+        val author: Author? = askUserToChooseAuthor(book)
+        if (author != null) {
+            val isDeleted = book.delete(author.authorId)
             if (isDeleted) {
                 println("Delete Successful!")
             } else {
@@ -375,31 +375,31 @@ fun deleteAnLibrary() {
     }
 }
 
-fun markLibraryStatus() {
+fun markAuthorStatus() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        val library: Library? = askUserToChooseLibrary(book)
-        if (library != null) {
+        val author: Author? = askUserToChooseAuthor(book)
+        if (author != null) {
             var changeStatus = 'X'
-            if (library.isLibraryComplete) {
+            if (author.isAuthorComplete) {
                 changeStatus =
-                    ScannerInput.readNextChar("The library is currently complete...do you want to mark it as TODO?")
+                    ScannerInput.readNextChar("The author is currently complete...do you want to mark it as TODO?")
                 if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
-                    library.isLibraryComplete = false
+                    author.isAuthorComplete = false
             }
             else {
                 changeStatus =
-                    ScannerInput.readNextChar("The library is currently TODO...do you want to mark it as Complete?")
+                    ScannerInput.readNextChar("The author is currently TODO...do you want to mark it as Complete?")
                 if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
-                    library.isLibraryComplete = true
+                    author.isAuthorComplete = true
             }
         }
     }
 }
 
 fun searchLibraries() {
-    val searchContents = readNextLine("Enter the library contents to search by: ")
-    val searchResults = bookAPI.searchLibraryByContents(searchContents)
+    val searchContents = readNextLine("Enter the author contents to search by: ")
+    val searchResults = bookAPI.searchAuthorByContents(searchContents)
     if (searchResults.isEmpty()) {
         println("No libraries found")
     } else {
@@ -430,12 +430,12 @@ private fun askUserToChooseActiveBook(): Book? {
     return null //selected book is not active
 }
 
-private fun askUserToChooseLibrary(book: Book): Library? {
-    if (book.numberOfLibraries() > 0) {
-        print(book.listLibraries())
-        return book.findOne(readNextInt("\nEnter the id of the library: "))
+private fun askUserToChooseAuthor(book: Book): Author? {
+    if (book.numberOfAuthors() > 0) {
+        print(book.listAuthors())
+        return book.findOne(readNextInt("\nEnter the id of the author: "))
     } else {
-        println("No libraries for chosen book")
+        println("No authors for chosen book")
         return null
     }
 }

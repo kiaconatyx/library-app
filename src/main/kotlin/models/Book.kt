@@ -8,34 +8,34 @@ data class Book(var bookId: Int = 0,
                 var bookISBN: Int,
                 var bookGenre: String,
                 var isBookArchived :Boolean = false,
-                var libraries : MutableSet<Library> = mutableSetOf()) {
+                var libraries : MutableSet<Author> = mutableSetOf()) {
 
-    private var lastLibraryId = 0
-    private fun getLibraryId() = lastLibraryId++
+    private var lastAuthorId = 0
+    private fun getAuthorId() = lastAuthorId++
 
-    fun addLibrary(library: Library) : Boolean {
-        library.libraryId = getLibraryId()
-        return libraries.add(library)
+    fun addAuthor(author: Author) : Boolean {
+        author.authorId = getAuthorId()
+        return libraries.add(author)
 
     }
     fun numberOfLibraries() = libraries.size
 
-    fun findOne(id: Int): Library?{
-        return libraries.find{ library -> library.libraryId == id }
+    fun findOne(id: Int): Author?{
+        return libraries.find{ author -> author.authorId == id }
     }
 
     fun delete(id: Int): Boolean {
-        return libraries.removeIf { library -> library.libraryId == id}
+        return libraries.removeIf { author -> author.authorId == id}
     }
 
-    fun update(id: Int, newLibrary: Library): Boolean {
-        val foundLibrary = findOne(id)
+    fun update(id: Int, newAuthor: Author): Boolean {
+        val foundAuthor = findOne(id)
 
         //if the object exists, use the details passed in the newBook parameter to
         //update the found object in the Set
-        if (foundLibrary != null){
-            foundLibrary.libraryContents = newLibrary.libraryContents
-            foundLibrary.isLibraryComplete = newLibrary.isLibraryComplete
+        if (foundAuthor != null){
+            foundAuthor.authorContents = newAuthor.authorContents
+            foundAuthor.isAuthorComplete = newAuthor.isAuthorComplete
             return true
         }
 
@@ -54,8 +54,8 @@ data class Book(var bookId: Int = 0,
 
     fun checkBookCompletionStatus(): Boolean {
         if (libraries.isNotEmpty()) {
-            for (library in libraries) {
-                if (!library.isLibraryComplete) {
+            for (author in libraries) {
+                if (!author.isAuthorComplete) {
                     return false
                 }
             }

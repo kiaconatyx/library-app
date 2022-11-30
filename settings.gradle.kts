@@ -1,3 +1,3 @@
 
-rootProject.name = "library-app"
+rootProject.name = "author-app"
 

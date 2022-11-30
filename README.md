@@ -1,6 +1,6 @@
-Library App
+Author App
 
-Background Library App - Console Library App.
+Background Author App - Console Author App.
 
 Keep track of multiple books. Menu-driven console app.
 

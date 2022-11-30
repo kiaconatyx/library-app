@@ -1,7 +1,7 @@
 package controllers
 import persistence.XMLSerializer
 import models.Book
-import models.Library
+import models.Author
 import persistence.Serializer
 
 
@@ -110,14 +110,14 @@ class BookAPI(serializerType: Serializer){
         return false
     }
 
-    fun searchLibraryByContents(searchString: String): String {
+    fun searchAuthorByContents(searchString: String): String {
         return if (numberOfBooks() == 0) "No books stored"
         else {
             var listOfBooks = ""
             for (book in books) {
-                for (library in book.libraries) {
-                    if (library.libraryContents.contains(searchString, ignoreCase = true)) {
-                        listOfBooks += "${book.bookId}: ${book.bookTitle} \n\t${library}\n"
+                for (author in book.libraries) {
+                    if (author.authorContents.contains(searchString, ignoreCase = true)) {
+                        listOfBooks += "${book.bookId}: ${book.bookTitle} \n\t${author}\n"
                     }
                 }
             }
@@ -134,9 +134,9 @@ class BookAPI(serializerType: Serializer){
         else {
             var listOfTodoLibraries = ""
             for (book in books) {
-                for (library in book.libraries) {
-                    if (!library.isLibraryComplete) {
-                        listOfTodoLibraries += book.bookTitle + ": " + library.libraryContents + "\n"
+                for (author in book.libraries) {
+                    if (!author.isAuthorComplete) {
+                        listOfTodoLibraries += book.bookTitle + ": " + author.authorContents + "\n"
                     }
                 }
             }
@@ -149,8 +149,8 @@ class BookAPI(serializerType: Serializer){
     fun numberOfToDoLibraries(): Int {
         var numberOfToDoLibraries = 0
         for (book in books) {
-            for (library in book.libraries) {
-                if (!library.isLibraryComplete) {
+            for (author in book.libraries) {
+                if (!author.isAuthorComplete) {
                     numberOfToDoLibraries++
                 }
             }
