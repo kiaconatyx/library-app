@@ -12,7 +12,8 @@ import java.io.File
 import java.lang.System.exit
 private val logger = KotlinLogging.logger {}
 
-
+//private val bookAPI = BookAPI(YAMLSerializer(File("books.yaml")))
+//private val bookAPI = BookAPI(YAMLSerializer(File("comics.yaml")))
 //private val bookAPI = BookAPI(XMLSerializer(File("books.xml")))
 private val bookAPI = BookAPI(JSONSerializer(File("books.json")))
 //private val comicAPI = ComicAPI(XMLSerializer(File("comics.xml")))
