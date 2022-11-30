@@ -8,34 +8,34 @@ data class Book(var bookId: Int = 0,
                 var bookISBN: Int,
                 var bookGenre: String,
                 var isBookArchived :Boolean = false,
-                var libraries : MutableSet<Library> = mutableSetOf()) {
+                var authors : MutableSet<Author> = mutableSetOf()) {
 
-    private var lastLibraryId = 0
-    private fun getLibraryId() = lastLibraryId++
+    private var lastAuthorId = 0
+    private fun getAuthorId() = lastAuthorId++
 
-    fun addLibrary(library: Library) : Boolean {
-        library.libraryId = getLibraryId()
-        return libraries.add(library)
+    fun addAuthor(author: Author) : Boolean {
+        author.authorId = getAuthorId()
+        return authors.add(author)
 
     }
-    fun numberOfLibraries() = libraries.size
+    fun numberOfAuthors() = authors.size
 
-    fun findOne(id: Int): Library?{
-        return libraries.find{ library -> library.libraryId == id }
+    fun findOne(id: Int): Author?{
+        return authors.find{ author -> author.authorId == id }
     }
 
     fun delete(id: Int): Boolean {
-        return libraries.removeIf { library -> library.libraryId == id}
+        return authors.removeIf { author -> author.authorId == id}
     }
 
-    fun update(id: Int, newLibrary: Library): Boolean {
-        val foundLibrary = findOne(id)
+    fun update(id: Int, newAuthor: Author): Boolean {
+        val foundAuthor = findOne(id)
 
         //if the object exists, use the details passed in the newBook parameter to
         //update the found object in the Set
-        if (foundLibrary != null){
-            foundLibrary.libraryContents = newLibrary.libraryContents
-            foundLibrary.isLibraryComplete = newLibrary.isLibraryComplete
+        if (foundAuthor != null){
+            foundAuthor.authorName = newAuthor.authorName
+            foundAuthor.isAuthorActive = newAuthor.isAuthorActive
             return true
         }
 
@@ -43,23 +43,23 @@ data class Book(var bookId: Int = 0,
         return false
     }
 
-    fun listLibraries() =
-        if (libraries.isEmpty())  "\tNO BOOKS ADDED"
-        else  Utilities.formatSetString(libraries)
+    fun listAuthors() =
+        if (authors.isEmpty())  "\tNO BOOKS ADDED"
+        else  Utilities.formatSetString(authors)
 
     override fun toString(): String {
         val archived = if (isBookArchived) 'Y' else 'N'
-        return "$bookId: $bookTitle, Rating($bookRating),ISBN($bookISBN), Genre($bookGenre), Archived($archived) \n${listLibraries()}"
+        return "$bookId: $bookTitle, Rating($bookRating),ISBN($bookISBN), Genre($bookGenre), Archived($archived) \n${listAuthors()}"
     }
 
     fun checkBookCompletionStatus(): Boolean {
-        if (libraries.isNotEmpty()) {
-            for (library in libraries) {
-                if (!library.isLibraryComplete) {
+        if (authors.isNotEmpty()) {
+            for (author in authors) {
+                if (!author.isAuthorActive) {
                     return false
                 }
             }
         }
-        return true //a book with empty libraries can be archived, or all libraries are complete
+        return true //a book with empty authors can be archived, or all authors are complete
     }
 }

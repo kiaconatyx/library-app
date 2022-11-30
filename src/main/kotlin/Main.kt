@@ -2,7 +2,7 @@ import controllers.BookAPI
 import controllers.ComicAPI
 import models.Book
 import models.Comic
-import models.Library
+import models.Author
 import mu.KotlinLogging
 import persistence.JSONSerializer
 import utils.ScannerInput
@@ -36,18 +36,20 @@ fun mainMenu() : Int {
          > |   5) Archive a book                     |
          > |   6) Search book(description)           |
          > -------------------------------------------
-         > | LIBRARY MENU                            | 
-         > |   6) Add library to a book              |
-         > |   7) Update library contents on a book  |
-         > |   8) Delete library from a book         |
-         > |   9) Mark library as complete/todo      | 
+         > | AUTHOR  MENU                            | 
+         > |   7) Add author to a book               |
+         > |   8) Update author name on a book       |
+         > |   9) Delete author from a book          |
+         > |   10) Mark author as active/inactive     | 
+         > |   11) Search for all authors            |
+         > |   12) List active authors               |
          > -------------------------------------------
-         > |   10) Add a Comic                       |
-         > |   11) List all Comics                   |
-         > |   12) Update a Comic                    |
-         > |   13) Delete a Comic                    |
-         > |   14) Archive a Comic                   |
-         > |   15) Search comic(description)         |
+         > |   13) Add a Comic                       |
+         > |   14) List all Comics                   |
+         > |   15) Update a Comic                    |
+         > |   16) Delete a Comic                    |
+         > |   17) Archive a Comic                   |
+         > |   18) Search comic(description)         |
          > -------------------------------------------
          > -------------------------------------------
          > |   20) Save                              |
@@ -67,20 +69,20 @@ fun runMenu() {
             4  -> deleteBook()
             5 -> archiveBook()
             6 -> searchBooks()
-            7 -> addLibraryToBook()
-            8 -> updateLibraryContentsInBook()
-            9 -> deleteAnLibrary()
-            10 -> markLibraryStatus()
-            15 -> searchLibraries()
-            16 -> listToDoLibraries()
-            17  -> addComic()
-            18  -> listComics()
-            19  -> updateComic()
-            20  -> deleteComic()
-            21 -> archiveComic()
-            22 -> searchComics()
-            23 -> save()
-            24 -> load()
+            7 -> addAuthorToBook()
+            8 -> updateAuthorNamesInBook()
+            9 -> deleteAnAuthor()
+            10 -> markAuthorStatus()
+            11 -> searchAuthors()
+            12 -> listToDoAuthors()
+            13  -> addComic()
+            14  -> listComics()
+            15  -> updateComic()
+            16  -> deleteComic()
+            17 -> archiveComic()
+            18 -> searchComics()
+            20 -> save()
+            21 -> load()
             0  -> exitApp()
             else -> println("Invalid option entered: ${option}")
         }
@@ -88,11 +90,12 @@ fun runMenu() {
 }
 
 fun addBook(){
+    val bookId = readNextInt("Enter an ID for the book")
     val bookTitle = readNextLine("Enter the book's title: ")
     val bookRating = readNextInt("Enter a rating for the book (1-low, 2, 3, 4, 5-high): ")
     val bookISBN = readNextInt("Enter a unique ISBN for the book ")
     val bookGenre = readNextLine("Enter a suitable genre for the book ")
-    val isAdded = bookAPI.add(Book(bookTitle, bookRating, bookISBN,bookGenre, false))
+    val isAdded = bookAPI.add(Book(bookId,bookTitle, bookRating, bookISBN,bookGenre, false))
 
     if (isAdded) {
         println("Added Successfully")
@@ -139,13 +142,14 @@ fun updateBook(){
         //only ask the user to choose the book if books exist
         val indexToUpdate = readNextInt("Enter the index of the book to update: ")
         if (bookAPI.isValidIndex(indexToUpdate)) {
+            val bookId = readNextInt("Enter an ID for the book")
             val bookTitle = readNextLine("Enter a title for the book: ")
             val bookRating = readNextInt("Enter a rating (1-low, 2, 3, 4, 5-high): ")
             val bookISBN = readNextInt("Enter a Unique ISBN for the book ")
             val bookGenre = readNextLine("Enter a genre for the book: ")
 
             //pass the index of the book and the new book details to BookAPI for updating and check for success.
-            if (bookAPI.updateBook(indexToUpdate, Book(bookTitle, bookRating, bookISBN,bookGenre, false))){
+            if (bookAPI.updateBook(indexToUpdate, Book(bookId,bookTitle, bookRating, bookISBN,bookGenre, false))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
@@ -332,40 +336,40 @@ fun exitApp(){
 }
 
 //-------------------------------------------
-//ITEM MENU (only available for active books)
+//AUTHOR MENU (only available for active books)
 //-------------------------------------------
-private fun addLibraryToBook() {
+private fun addAuthorToBook() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        if (book.addLibrary(Library(libraryContents = readNextLine("\t Library Contents: "))))
+        if (book.addAuthor(Author(authorName = readNextLine("\t Author Name: "))))
             println("Add Successful!")
         else println("Add NOT Successful")
     }
 }
 
-fun updateLibraryContentsInBook() {
+fun updateAuthorNamesInBook() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        val library: Library? = askUserToChooseLibrary(book)
-        if (library != null) {
-            val newContents = readNextLine("Enter new contents: ")
-            if (book.update(library.libraryId, Library(libraryContents = newContents))) {
-                println("Library contents updated")
+        val author: Author? = askUserToChooseAuthor(book)
+        if (author != null) {
+            val newName = readNextLine("Enter new name: ")
+            if (book.update(author.authorId, Author(authorName = newName))) {
+                println("Author name updated")
             } else {
-                println("Library contents NOT updated")
+                println("Author name NOT updated")
             }
         } else {
-            println("Invalid Library Id")
+            println("Invalid Author Id")
         }
     }
 }
 
-fun deleteAnLibrary() {
+fun deleteAnAuthor() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        val library: Library? = askUserToChooseLibrary(book)
-        if (library != null) {
-            val isDeleted = book.delete(library.libraryId)
+        val author: Author? = askUserToChooseAuthor(book)
+        if (author != null) {
+            val isDeleted = book.delete(author.authorId)
             if (isDeleted) {
                 println("Delete Successful!")
             } else {
@@ -375,43 +379,43 @@ fun deleteAnLibrary() {
     }
 }
 
-fun markLibraryStatus() {
+fun markAuthorStatus() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        val library: Library? = askUserToChooseLibrary(book)
-        if (library != null) {
+        val author: Author? = askUserToChooseAuthor(book)
+        if (author != null) {
             var changeStatus = 'X'
-            if (library.isLibraryComplete) {
+            if (author.isAuthorActive) {
                 changeStatus =
-                    ScannerInput.readNextChar("The library is currently complete...do you want to mark it as TODO?")
+                    ScannerInput.readNextChar("The author is Active...do you want to mark them as active author")
                 if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
-                    library.isLibraryComplete = false
+                    author.isAuthorActive = false
             }
             else {
                 changeStatus =
-                    ScannerInput.readNextChar("The library is currently TODO...do you want to mark it as Complete?")
+                    ScannerInput.readNextChar("The author is currently inactive...do you want to mark them as inactive?")
                 if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
-                    library.isLibraryComplete = true
+                    author.isAuthorActive = true
             }
         }
     }
 }
 
-fun searchLibraries() {
-    val searchContents = readNextLine("Enter the library contents to search by: ")
-    val searchResults = bookAPI.searchLibraryByContents(searchContents)
+fun searchAuthors() {
+    val searchNames = readNextLine("Enter the author contents to search by: ")
+    val searchResults = bookAPI.searchAuthorByNames(searchNames)
     if (searchResults.isEmpty()) {
-        println("No libraries found")
+        println("No authors found")
     } else {
         println(searchResults)
     }
 }
 
-fun listToDoLibraries(){
-    if (bookAPI.numberOfToDoLibraries() > 0) {
-        println("Total TODO Libraries: ${bookAPI.numberOfToDoLibraries()}")
+fun listToDoAuthors(){
+    if (bookAPI.numberOfToDoAuthors() > 0) {
+        println("Total TODO Authors: ${bookAPI.numberOfToDoAuthors()}")
     }
-    println(bookAPI.listTodoLibraries())
+    println(bookAPI.listTodoAuthors())
 }
 private fun askUserToChooseActiveBook(): Book? {
     listActiveBooks()
@@ -430,12 +434,12 @@ private fun askUserToChooseActiveBook(): Book? {
     return null //selected book is not active
 }
 
-private fun askUserToChooseLibrary(book: Book): Library? {
-    if (book.numberOfLibraries() > 0) {
-        print(book.listLibraries())
-        return book.findOne(readNextInt("\nEnter the id of the library: "))
+private fun askUserToChooseAuthor(book: Book): Author? {
+    if (book.numberOfAuthors() > 0) {
+        print(book.listAuthors())
+        return book.findOne(readNextInt("\nEnter the id of the author: "))
     } else {
-        println("No libraries for chosen book")
+        println("No authors for chosen book")
         return null
     }
 }

@@ -1,7 +1,7 @@
 package controllers
 import persistence.XMLSerializer
 import models.Book
-import models.Library
+import models.Author
 import persistence.Serializer
 
 
@@ -110,52 +110,52 @@ class BookAPI(serializerType: Serializer){
         return false
     }
 
-    fun searchLibraryByContents(searchString: String): String {
+    fun searchAuthorByNames(searchString: String): String {
         return if (numberOfBooks() == 0) "No books stored"
         else {
             var listOfBooks = ""
             for (book in books) {
-                for (library in book.libraries) {
-                    if (library.libraryContents.contains(searchString, ignoreCase = true)) {
-                        listOfBooks += "${book.bookId}: ${book.bookTitle} \n\t${library}\n"
+                for (author in book.authors) {
+                    if (author.authorName.contains(searchString, ignoreCase = true)) {
+                        listOfBooks += "${book.bookId}: ${book.bookTitle} \n\t${author}\n"
                     }
                 }
             }
-            if (listOfBooks == "") "No libraries found for: $searchString"
+            if (listOfBooks == "") "No authors found for: $searchString"
             else listOfBooks
         }
     }
 
     // ----------------------------------------------
-    //  LISTING METHODS FOR ITEMS
+    //  LISTING METHODS FOR AUTHORS
     // ----------------------------------------------
-    fun listTodoLibraries(): String =
+    fun listTodoAuthors(): String =
         if (numberOfBooks() == 0) "No books stored"
         else {
-            var listOfTodoLibraries = ""
+            var listOfTodoAuthors = ""
             for (book in books) {
-                for (library in book.libraries) {
-                    if (!library.isLibraryComplete) {
-                        listOfTodoLibraries += book.bookTitle + ": " + library.libraryContents + "\n"
+                for (author in book.authors) {
+                    if (!author.isAuthorActive) {
+                        listOfTodoAuthors += book.bookTitle + ": " + author.authorName + "\n"
                     }
                 }
             }
-            listOfTodoLibraries
+            listOfTodoAuthors
         }
 
     // ----------------------------------------------
-    //  COUNTING METHODS FOR ITEMS
+    //  COUNTING METHODS FOR AUTHORS
     // ----------------------------------------------
-    fun numberOfToDoLibraries(): Int {
-        var numberOfToDoLibraries = 0
+    fun numberOfToDoAuthors(): Int {
+        var numberOfToDoAuthors = 0
         for (book in books) {
-            for (library in book.libraries) {
-                if (!library.isLibraryComplete) {
-                    numberOfToDoLibraries++
+            for (author in book.authors) {
+                if (!author.isAuthorActive) {
+                    numberOfToDoAuthors++
                 }
             }
         }
-        return numberOfToDoLibraries
+        return numberOfToDoAuthors
     }
 
 
