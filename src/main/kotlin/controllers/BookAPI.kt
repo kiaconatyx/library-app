@@ -110,13 +110,13 @@ class BookAPI(serializerType: Serializer){
         return false
     }
 
-    fun searchAuthorByContents(searchString: String): String {
+    fun searchAuthorByNames(searchString: String): String {
         return if (numberOfBooks() == 0) "No books stored"
         else {
             var listOfBooks = ""
             for (book in books) {
                 for (author in book.authors) {
-                    if (author.authorContents.contains(searchString, ignoreCase = true)) {
+                    if (author.authorName.contains(searchString, ignoreCase = true)) {
                         listOfBooks += "${book.bookId}: ${book.bookTitle} \n\t${author}\n"
                     }
                 }
@@ -135,8 +135,8 @@ class BookAPI(serializerType: Serializer){
             var listOfTodoAuthors = ""
             for (book in books) {
                 for (author in book.authors) {
-                    if (!author.isAuthorComplete) {
-                        listOfTodoAuthors += book.bookTitle + ": " + author.authorContents + "\n"
+                    if (!author.isAuthorActive) {
+                        listOfTodoAuthors += book.bookTitle + ": " + author.authorName + "\n"
                     }
                 }
             }
@@ -150,7 +150,7 @@ class BookAPI(serializerType: Serializer){
         var numberOfToDoAuthors = 0
         for (book in books) {
             for (author in book.authors) {
-                if (!author.isAuthorComplete) {
+                if (!author.isAuthorActive) {
                     numberOfToDoAuthors++
                 }
             }

@@ -34,8 +34,8 @@ data class Book(var bookId: Int = 0,
         //if the object exists, use the details passed in the newBook parameter to
         //update the found object in the Set
         if (foundAuthor != null){
-            foundAuthor.authorContents = newAuthor.authorContents
-            foundAuthor.isAuthorComplete = newAuthor.isAuthorComplete
+            foundAuthor.authorName = newAuthor.authorName
+            foundAuthor.isAuthorActive = newAuthor.isAuthorActive
             return true
         }
 
@@ -55,7 +55,7 @@ data class Book(var bookId: Int = 0,
     fun checkBookCompletionStatus(): Boolean {
         if (authors.isNotEmpty()) {
             for (author in authors) {
-                if (!author.isAuthorComplete) {
+                if (!author.isAuthorActive) {
                     return false
                 }
             }

@@ -68,7 +68,7 @@ fun runMenu() {
             5 -> archiveBook()
             6 -> searchBooks()
             7 -> addAuthorToBook()
-            8 -> updateAuthorContentsInBook()
+            8 -> updateAuthorNamesInBook()
             9 -> deleteAnAuthor()
             10 -> markAuthorStatus()
             15 -> searchAuthors()
@@ -339,22 +339,22 @@ fun exitApp(){
 private fun addAuthorToBook() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        if (book.addAuthor(Author(authorContents = readNextLine("\t Author Contents: "))))
+        if (book.addAuthor(Author(authorName = readNextLine("\t Author Name: "))))
             println("Add Successful!")
         else println("Add NOT Successful")
     }
 }
 
-fun updateAuthorContentsInBook() {
+fun updateAuthorNamesInBook() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
         val author: Author? = askUserToChooseAuthor(book)
         if (author != null) {
-            val newContents = readNextLine("Enter new contents: ")
-            if (book.update(author.authorId, Author(authorContents = newContents))) {
-                println("Author contents updated")
+            val newName = readNextLine("Enter new name: ")
+            if (book.update(author.authorId, Author(authorName = newName))) {
+                println("Author name updated")
             } else {
-                println("Author contents NOT updated")
+                println("Author name NOT updated")
             }
         } else {
             println("Invalid Author Id")
@@ -383,25 +383,25 @@ fun markAuthorStatus() {
         val author: Author? = askUserToChooseAuthor(book)
         if (author != null) {
             var changeStatus = 'X'
-            if (author.isAuthorComplete) {
+            if (author.isAuthorActive) {
                 changeStatus =
-                    ScannerInput.readNextChar("The author is currently complete...do you want to mark it as TODO?")
+                    ScannerInput.readNextChar("The author is Active...do you want to mark them as active author")
                 if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
-                    author.isAuthorComplete = false
+                    author.isAuthorActive = false
             }
             else {
                 changeStatus =
-                    ScannerInput.readNextChar("The author is currently TODO...do you want to mark it as Complete?")
+                    ScannerInput.readNextChar("The author is currently inactive...do you want to mark them as inactive?")
                 if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
-                    author.isAuthorComplete = true
+                    author.isAuthorActive = true
             }
         }
     }
 }
 
 fun searchAuthors() {
-    val searchContents = readNextLine("Enter the author contents to search by: ")
-    val searchResults = bookAPI.searchAuthorByContents(searchContents)
+    val searchNames = readNextLine("Enter the author contents to search by: ")
+    val searchResults = bookAPI.searchAuthorByNames(searchNames)
     if (searchResults.isEmpty()) {
         println("No authors found")
     } else {
