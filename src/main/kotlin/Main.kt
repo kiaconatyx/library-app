@@ -12,10 +12,11 @@ import java.io.File
 import java.lang.System.exit
 private val logger = KotlinLogging.logger {}
 
-
+//private val bookAPI = BookAPI(YAMLSerializer(File("books.yaml")))
+//private val bookAPI = BookAPI(YAMLSerializer(File("comics.yaml")))
 //private val bookAPI = BookAPI(XMLSerializer(File("books.xml")))
-private val bookAPI = BookAPI(JSONSerializer(File("books.json")))
 //private val comicAPI = ComicAPI(XMLSerializer(File("comics.xml")))
+private val bookAPI = BookAPI(JSONSerializer(File("books.json")))
 private val comicAPI = ComicAPI(JSONSerializer(File("comics.json")))
 
 fun main(args: Array<String>) {
@@ -341,7 +342,7 @@ fun exitApp(){
 private fun addAuthorToBook() {
     val book: Book? = askUserToChooseActiveBook()
     if (book != null) {
-        if (book.addAuthor(Author(authorName = readNextLine("\t Author Name: "))))
+        if (book.addAuthor(Author(authorNumber = 0, authorName = readNextLine("\t Author Name: "))))
             println("Add Successful!")
         else println("Add NOT Successful")
     }
@@ -353,7 +354,8 @@ fun updateAuthorNamesInBook() {
         val author: Author? = askUserToChooseAuthor(book)
         if (author != null) {
             val newName = readNextLine("Enter new name: ")
-            if (book.update(author.authorId, Author(authorName = newName))) {
+
+            if (book.updateAuthorName(author.authorId, newName)) {
                 println("Author name updated")
             } else {
                 println("Author name NOT updated")

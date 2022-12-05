@@ -1,6 +1,6 @@
 package models
 
-import Utils.Utilities
+import utils.Utilities
 
 data class Book(var bookId: Int = 0,
                 var bookTitle: String,
@@ -28,7 +28,7 @@ data class Book(var bookId: Int = 0,
         return authors.removeIf { author -> author.authorId == id}
     }
 
-    fun update(id: Int, newAuthor: Author): Boolean {
+    fun updateAuthor(id: Int, newAuthor: Author): Boolean {
         val foundAuthor = findOne(id)
 
         //if the object exists, use the details passed in the newBook parameter to
@@ -36,6 +36,20 @@ data class Book(var bookId: Int = 0,
         if (foundAuthor != null){
             foundAuthor.authorName = newAuthor.authorName
             foundAuthor.isAuthorActive = newAuthor.isAuthorActive
+            return true
+        }
+
+        //if the object was not found, return false, indicating that the update was not successful
+        return false
+    }
+    fun updateAuthorName(id: Int, aName: String): Boolean {
+        val foundAuthor = findOne(id)
+
+        //if the object exists, use the details passed in the newBook parameter to
+        //update the found object in the Set
+        if (foundAuthor != null){
+            foundAuthor.authorName = aName
+
             return true
         }
 
