@@ -41,7 +41,7 @@ fun mainMenu() : Int {
          > |   7) Add author to a book               |
          > |   8) Update author name on a book       |
          > |   9) Delete author from a book          |
-         > |   10) Mark author as active/inactive     | 
+         > |   10) Mark author as active/inactive    | 
          > |   11) Search for all authors            |
          > |   12) List active authors               |
          > -------------------------------------------
