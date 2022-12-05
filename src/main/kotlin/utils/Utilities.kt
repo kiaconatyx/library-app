@@ -1,4 +1,4 @@
-package Utils
+package utils
 
 import models.Author
 import models.Book
